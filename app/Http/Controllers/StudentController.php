@@ -11,9 +11,11 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Student::with('department')->get();
+        $data = Student::with('department')
+            ->where('name', 'like', '%' . $request->query('search') . '%')
+            ->get();
         return ['data' => $data];
     }
 
@@ -31,7 +33,6 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         Student::create([
-            'code' => $request->id,
             'name' => $request->name,
             'department_id' => $request->department_id,
             'username' => $request->username,
@@ -68,7 +69,6 @@ class StudentController extends Controller
     public function update(Request $request, $id)
     {
         $item = Student::find($id);
-        $item->code = $request->code;
         $item->name = $request->name;
         $item->department_id = $request->department_id;
         $item->username = $request->username;

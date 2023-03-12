@@ -11,9 +11,12 @@ class SubjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Subject::with('department')->get();
+        $data = Subject::with('department')
+            ->where('code', 'like', '%' . $request->query('search') . '%')
+            ->orWhere('name', 'like', '%' . $request->query('search') . '%')
+            ->get();
         return ['data' => $data];
     }
 

@@ -11,9 +11,11 @@ class TeacherController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Teacher::with('department')->get();
+        $data = Teacher::with('department')
+            ->where('name', 'like', '%' . $request->query('search') . '%')
+            ->get();
         return ['data' => $data];
     }
 
@@ -31,7 +33,6 @@ class TeacherController extends Controller
     public function store(Request $request)
     {
         Teacher::create([
-            'code' => $request->code,
             'name' => $request->name,
             'department_id' => $request->department_id,
             'username' => $request->username,
@@ -68,7 +69,6 @@ class TeacherController extends Controller
     public function update(Request $request, $id)
     {
         $item = Teacher::find($id);
-        $item->code = $request->code;
         $item->name = $request->name;
         $item->department_id = $request->department_id;
         $item->username = $request->username;

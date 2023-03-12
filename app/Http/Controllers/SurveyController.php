@@ -10,15 +10,18 @@ use App\Models\Question;
 use App\Models\StudentSurveySection;
 use App\Models\TeacherSurveySection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SurveyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Survey::with('questions.options')->get();
+        $data = Survey::with('questions.options')
+            ->where('title', 'like', '%' . $request->query('search') . '%')
+            ->get();
         return [
             'data' => $data
         ];
@@ -40,7 +43,7 @@ class SurveyController extends Controller
         // var_dump($request);
         $body = $request->all();
         $survey = Survey::create([
-            'code' => '123',
+            'code' => Str::uuid(),
             'title' => $body['title'],
             'note' => '123',
             'status' => 1,
@@ -95,7 +98,6 @@ class SurveyController extends Controller
         $body = $request->all();
 
         $survey = Survey::find($id);
-        $survey->code = '123';
         $survey->title = $body['title'];
         $survey->note = '123';
         $survey->status = 1;

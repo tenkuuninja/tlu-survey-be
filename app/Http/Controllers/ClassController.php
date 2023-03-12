@@ -12,9 +12,12 @@ class ClassController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Classs::with('teacher.department')->with('subject.department')->get();
+        $data = Classs::with('teacher.department')->with('subject.department')
+            ->where('code', 'like', '%' . $request->query('search') . '%')
+            ->orWhere('name', 'like', '%' . $request->query('search') . '%')
+            ->get();
         return ['data' => $data];
     }
 

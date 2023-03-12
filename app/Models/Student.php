@@ -12,6 +12,9 @@ class Student extends Model
 
     public $timestamps = false;
     protected $guarded = [];
+    protected $hidden = [
+        'password_hashed',
+    ];
 
     public function department(): BelongsTo
     {

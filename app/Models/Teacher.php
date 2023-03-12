@@ -9,12 +9,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Teacher extends Model
 {
     use HasFactory;
-    
+
     protected $guarded = [];
-    
+    protected $hidden = [
+        'password_hashed',
+    ];
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-    
+
     public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
