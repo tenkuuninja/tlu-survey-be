@@ -33,9 +33,9 @@ class SubjectController extends Controller
         Subject::create([
             'code' => $request->code,
             'name' => $request->name,
-            'department_id' => $request->department_id,
-            'description' => $request->description,
-            'credit_number' => $request->credit_number,
+            'subject_id' => $request->subject_id,
+            'teacher_id' => $request->teacher_id,
+            'status' => $request->status,
         ]);
         return ['result' => 'success'];
     }
@@ -64,9 +64,9 @@ class SubjectController extends Controller
         $item = Subject::find($id);
         $item->code = $request->code;
         $item->name = $request->name;
-        $item->department_id = $request->department_id;
-        $item->description = $request->description;
-        $item->credit_number = $request->credit_number;
+        $item->subject_id = $request->subject_id;
+        $item->teacher_id = $request->teacher_id;
+        $item->status = $request->status;
         $item->save();
         return ['result' => 'success'];
     }

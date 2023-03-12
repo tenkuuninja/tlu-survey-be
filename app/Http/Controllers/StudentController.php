@@ -34,8 +34,14 @@ class SubjectController extends Controller
             'code' => $request->code,
             'name' => $request->name,
             'department_id' => $request->department_id,
-            'description' => $request->description,
-            'credit_number' => $request->credit_number,
+            'username' => $request->username,
+            'password_hashed' => password_hash($request->password_hashed, PASSWORD_BCRYPT),
+            'email' => $request->email,
+            'name' => $request->name,
+            'address' => $request->address,
+            'phone_number' => $request->phone_number,
+            'sex' => $request->sex,
+            'status' => $request->status,
         ]);
         return ['result' => 'success'];
     }
@@ -65,8 +71,14 @@ class SubjectController extends Controller
         $item->code = $request->code;
         $item->name = $request->name;
         $item->department_id = $request->department_id;
-        $item->description = $request->description;
-        $item->credit_number = $request->credit_number;
+        $item->username = $request->username;
+        $item->password_hashed = password_hash($request->password_hashed, PASSWORD_BCRYPT);
+        $item->email = $request->email;
+        $item->name = $request->name;
+        $item->address = $request->address;
+        $item->phone_number = $request->phone_number;
+        $item->sex = $request->sex;
+        $item->status = $request->status;
         $item->save();
         return ['result' => 'success'];
     }

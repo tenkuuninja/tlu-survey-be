@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('teacher_departments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('dept_id')->nullable();
-            $table->foreign('dept_id')->references('id')->on('departments')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('department_id')->nullable();
+            $table->foreign('department_id')->references('id')->on('departments')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('teacher_id')->nullable();
             $table->foreign('teacher_id')->references('id')->on('teachers')->cascadeOnUpdate()->nullOnDelete();
         });

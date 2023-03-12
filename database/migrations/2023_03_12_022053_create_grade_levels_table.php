@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('school_year_id')->nullable();
             $table->foreign('school_year_id')->references('id')->on('school_years')->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignId('dept_id')->nullable();
-            $table->foreign('dept_id')->references('id')->on('departments')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('department_id')->nullable();
+            $table->foreign('department_id')->references('id')->on('departments')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 
