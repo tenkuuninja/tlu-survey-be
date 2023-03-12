@@ -158,11 +158,11 @@ class SurveyController extends Controller
     {
         $body = $request->all();
         Answer::insert($body['answers']);
-        if ($body['section']['teacher_id'] !== null) {
-            TeacherSurveySection::create($body['section']);
+        if ($body['type'] == 'teacher') {
+            TeacherSurveySection::create($body['teacher_section']);
         }
-        if ($body['section']['student_id'] !== null) {
-            StudentSurveySection::create($body['section']);
+        if ($body['type'] == 'student') {
+            StudentSurveySection::create($body['student_section']);
         }
         return ['result' => 'success'];
     }
