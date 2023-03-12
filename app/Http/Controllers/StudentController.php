@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Subject;
+use App\Models\Student;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class SubjectController extends Controller
+class StudentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = Subject::all();
+        $data = Student::all();
         return ['data' => $data];
     }
 
@@ -30,7 +30,7 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-        Subject::create([
+        Student::create([
             'code' => $request->code,
             'name' => $request->name,
             'department_id' => $request->department_id,
@@ -49,7 +49,7 @@ class SubjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Subject $subject)
+    public function show(Student $student)
     {
         //
     }
@@ -57,7 +57,7 @@ class SubjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Subject $subject)
+    public function edit(Student $student)
     {
         //
     }
@@ -67,7 +67,7 @@ class SubjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = Subject::find($id);
+        $item = Student::find($id);
         $item->code = $request->code;
         $item->name = $request->name;
         $item->department_id = $request->department_id;
@@ -88,7 +88,7 @@ class SubjectController extends Controller
      */
     public function destroy($id)
     {
-        Subject::destroy($id);
+        Student::destroy($id);
         return ['result' => 'success'];
     }
 }
