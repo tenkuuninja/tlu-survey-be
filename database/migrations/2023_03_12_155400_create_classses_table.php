@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('code');
             $table->string('name');
             $table->integer('status');
-            $table->string('created_name');
-            $table->string('updated_name');
+            $table->string('created_name')->nullable();
+            $table->string('updated_name')->nullable();
             $table->timestamps();
         });
     }

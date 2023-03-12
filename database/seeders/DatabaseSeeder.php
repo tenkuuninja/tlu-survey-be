@@ -46,46 +46,6 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        Admin::factory()->createMany([
-            [
-                'username' => 'admin123',
-                'password_hashed' => password_hash('admin123', PASSWORD_BCRYPT),
-                'email' => 'admin@gmail.com',
-                'name' => 'Quảng trị viên 1',
-                'address' => 'Hà Nội',
-                'phone_number' => '0123456789',
-                'sex' => 1,
-                'status' => 1
-            ],
-        ]);
-
-        Teacher::factory()->createMany([
-            [
-                'username' => 'teacher123',
-                'password_hashed' => password_hash('teacher123', PASSWORD_BCRYPT),
-                'email' => 'teacher@gmail.com',
-                'name' => 'Giảng viên 1',
-                'address' => 'Hà Nội',
-                'phone_number' => '0123456789',
-                'sex' => 1,
-                'status' => 1
-            ],
-        ]);
-
-        Student::factory()->createMany([
-            [
-                'username' => 'student123',
-                'password_hashed' => password_hash('student123', PASSWORD_BCRYPT),
-                'email' => 'student@gmail.com',
-                'name' => 'Sinh viên 1',
-                'address' => 'Hà Nội',
-                'phone_number' => '0123456789',
-                'sex' => 1,
-                'status' => 1
-            ],
-        ]);
-
-
         SchoolYear::factory()->createMany([
             ['years' => 2017],
             ['years' => 2018],
@@ -107,6 +67,47 @@ class DatabaseSeeder extends Seeder
             ['code' => 'ATTT', 'name' => 'An toàn thông tin'],
         ]);
 
+        Admin::factory()->createMany([
+            [
+                'username' => 'admin123',
+                'password_hashed' => password_hash('admin123', PASSWORD_BCRYPT),
+                'email' => 'admin@gmail.com',
+                'name' => 'Quảng trị viên 1',
+                'address' => 'Hà Nội',
+                'phone_number' => '0123456789',
+                'sex' => 1,
+                'status' => 1
+            ],
+        ]);
+
+        Teacher::factory()->createMany([
+            [
+                'department_id' => 2,
+                'username' => 'teacher123',
+                'password_hashed' => password_hash('teacher123', PASSWORD_BCRYPT),
+                'email' => 'teacher@gmail.com',
+                'name' => 'Giảng viên 1',
+                'address' => 'Hà Nội',
+                'phone_number' => '0123456789',
+                'sex' => 1,
+                'status' => 1
+            ],
+        ]);
+
+        Student::factory()->createMany([
+            [
+                'department_id' => 2,
+                'username' => 'student123',
+                'password_hashed' => password_hash('student123', PASSWORD_BCRYPT),
+                'email' => 'student@gmail.com',
+                'name' => 'Sinh viên 1',
+                'address' => 'Hà Nội',
+                'phone_number' => '0123456789',
+                'sex' => 1,
+                'status' => 1
+            ],
+        ]);
+        
         GradeLevel::factory()->createMany([
             [
                 'code' => 'K62CNTT',

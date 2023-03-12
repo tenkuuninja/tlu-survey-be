@@ -13,7 +13,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $data = Teacher::all();
+        $data = Teacher::with('department')->get();
         return ['data' => $data];
     }
 

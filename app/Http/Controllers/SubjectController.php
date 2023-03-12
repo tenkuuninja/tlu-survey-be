@@ -13,7 +13,7 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $data = Subject::all();
+        $data = Subject::with('department')->get();
         return ['data' => $data];
     }
 

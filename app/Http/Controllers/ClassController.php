@@ -14,7 +14,7 @@ class ClassController extends Controller
      */
     public function index()
     {
-        $data = Classs::all();
+        $data = Classs::with('teacher.department')->with('subject.department')->get();
         return ['data' => $data];
     }
 
