@@ -36,17 +36,25 @@ class AccountController extends Controller
                 break;
         }
         if ($user == null) {
-            return response(['errorMessage' => 'Tài khoản không tồn tại'], 400);
+            return response(['errorMessage' => 'Bạn đã nhập sai tên đăng nhập hoặc mật khẩu'], 400);
+        }
+        if ($user->status != 1) {
+            return response(['errorMessage' => 'Tài khoản đã ngừng hoạt động'], 400);
         }
         $match = password_verify($request->password, $user->password_hashed);
         if (!$match) {
-            return response(['errorMessage' => 'Mật khẩu không chính xác'], 400);
+            return response(['errorMessage' => 'Bạn đã nhập sai tên đăng nhập hoặc mật khẩu'], 400);
         }
-        $token = JWTAuth::encode(JWTFactory::make([
-            'role' => 'admin',
-            'id' => $user->id,
-            'name' => $user->name,
-        ]));
+        
+        $payload = JWTFactory::sub($user->id)
+            ->myCustomArray([
+                'role' => $request->role,
+                'id' => $user->id,
+                'name' => $user->name,
+            ])
+            ->make();
+
+        $token = JWTAuth::encode($payload);
 
         return [
             'token' => $token->get(),
@@ -57,45 +65,30 @@ class AccountController extends Controller
 
     public function get_current_user(Request $request)
     {
-        $payload = JWTAuth::parseToken()->getPayload();
-        $role = $payload->get('role');
+        $payload = JWTAuth::parseToken()->getPayload()->get('myCustomArray');
         $user = null;
-        $token = JWTAuth::getToken();
-        $apy = JWTAuth::getPayload($token)->get('role');
-        // switch ($request->role) {
-        //     case 'admin':
-        //         $user = Admin::where('username', $request->username)->first();
-        //         break;
-        //     case 'teacher':
-        //         $user = Teacher::where('username', $request->username)->first();
-        //         break;
-        //     case 'student':
-        //         $user = Student::where('username', $request->username)->first();
-        //         break;
+        switch ($payload['role']) {
+            case 'admin':
+                $user = Admin::find($payload['id']);
+                break;
+            case 'teacher':
+                $user = Teacher::find($payload['id']);
+                break;
+            case 'student':
+                $user = Student::find($payload['id']);
+                break;
 
-        //     default:
-        //         # code...
-        //         break;
-        // }
-        // if ($user == null) {
-        //     return response(['message' => 'User not exist'], 400);
-        // }
-        // $match = password_verify($request->password, $user->password_hashed);
-        // if (!$match) {
-        //     return response(['message' => 'Password incorrect'], 400);
-        // }
-        // $token = JWTAuth::encode(JWTFactory::make([
-        //     'role' => 'admin',
-        //     'id' => $user->id,
-        //     'name' => $user->name,
-        // ]));
+            default:
+                # code...
+                break;
+        }
+        if ($user == null) {
+            return response(['message' => 'User not exist'], 400);
+        }
 
         return [
-            // 'token' => $token->get(),
-            'role' => $role,
-            'payload' => $payload,
-            'apy' => $apy,
-            // 'user' => $user,
+            'role' => $payload['role'],
+            'user' => $user,
         ];
     }
 }

@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Models\Option;
 use App\Models\Question;
+use App\Models\StudentSurveySection;
+use App\Models\TeacherSurveySection;
 use Illuminate\Http\Request;
 
 class SurveyController extends Controller
@@ -155,7 +157,13 @@ class SurveyController extends Controller
     public function submit_form_survey(Request $request)
     {
         $body = $request->all();
-        Answer::insert($body);
+        Answer::insert($body['answers']);
+        if ($body['type'] == 'teacher') {
+            TeacherSurveySection::create($body['teacher_section']);
+        }
+        if ($body['type'] == 'student') {
+            StudentSurveySection::create($body['student_section']);
+        }
         return ['result' => 'success'];
     }
 }
