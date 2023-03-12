@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('phone_number');
             $table->integer('sex');
             $table->integer('status');
-            $table->timestamps();
         });
     }
 

@@ -20,7 +20,6 @@ return new class extends Migration
             $table->foreign('type_id')->references('id')->on('types')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('survey_id')->nullable();
             $table->foreign('survey_id')->references('id')->on('surveys')->cascadeOnUpdate()->nullOnDelete();
-            $table->timestamps();
         });
     }
 
