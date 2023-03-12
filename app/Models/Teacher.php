@@ -10,4 +10,7 @@ class Teacher extends Model
     use HasFactory;
     
     protected $guarded = [];
+    
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 }

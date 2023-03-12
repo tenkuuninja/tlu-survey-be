@@ -9,5 +9,6 @@ class Option extends Model
 {
     use HasFactory;
     
+    public $timestamps = false; 
     protected $guarded = [];
 }

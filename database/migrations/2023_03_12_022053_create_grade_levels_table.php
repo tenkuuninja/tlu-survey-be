@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('grade_levels', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('code');
+            $table->string('name');
+            $table->foreignId('school_year_id')->nullable();
+            $table->foreign('school_year_id')->references('id')->on('school_years')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('dept_id')->nullable();
+            $table->foreign('dept_id')->references('id')->on('departments')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 

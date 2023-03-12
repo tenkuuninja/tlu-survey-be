@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreign('question_id')->references('id')->on('questions')->cascadeOnUpdate()->nullOnDelete();
             $table->string('title');
             $table->integer('option_no');
-            $table->timestamps();
         });
     }
 

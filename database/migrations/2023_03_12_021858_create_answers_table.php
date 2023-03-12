@@ -23,7 +23,6 @@ return new class extends Migration
             $table->foreign('option_id')->references('id')->on('options')->cascadeOnUpdate()->nullOnDelete();
             $table->string('answer_text')->nullable();
             $table->float('answer_numberic')->nullable();
-            $table->timestamps();
         });
     }
 

@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('student_survey_sections', function (Blueprint $table) {
+        Schema::create('student_classes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id')->nullable();
             $table->foreign('student_id')->references('id')->on('students')->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignId('survey_id')->nullable();
-            $table->foreign('survey_id')->references('id')->on('surveys')->cascadeOnUpdate()->nullOnDelete();
-            $table->timestamp('completed_at');
+            $table->foreignId('class_id')->nullable();
+            $table->foreign('class_id')->references('id')->on('classses')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('student_survey_sections');
+        Schema::dropIfExists('student_classes');
     }
 };

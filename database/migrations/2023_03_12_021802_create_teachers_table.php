@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -21,6 +22,8 @@ return new class extends Migration
             $table->string('phone_number');
             $table->integer('sex');
             $table->integer('status');
+            $table->string('created_name');
+            $table->string('updated_name');
             $table->timestamps();
         });
     }

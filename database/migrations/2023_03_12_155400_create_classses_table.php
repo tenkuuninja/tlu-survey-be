@@ -12,13 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('teacher_survey_sections', function (Blueprint $table) {
+        Schema::create('classses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('subject_id')->nullable();
+            $table->foreign('subject_id')->references('id')->on('subjects')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('teacher_id')->nullable();
             $table->foreign('teacher_id')->references('id')->on('teachers')->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignId('survey_id')->nullable();
-            $table->foreign('survey_id')->references('id')->on('surveys')->cascadeOnUpdate()->nullOnDelete();
-            $table->timestamp('completed_at');
+            $table->string('code');
+            $table->string('name');
+            $table->integer('status');
+            $table->string('created_name');
+            $table->string('updated_name');
+            $table->timestamps();
         });
     }
 
@@ -27,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teacher_survey_sections');
+        Schema::dropIfExists('classses');
     }
 };
