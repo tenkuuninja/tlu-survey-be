@@ -36,16 +36,19 @@ class AccountController extends Controller
                 break;
         }
         if ($user == null) {
-            return response(['errorMessage' => 'Tài khoản không tồn tại'], 400);
+            return response(['errorMessage' => 'Bạn đã nhập sai tên đăng nhập hoặc mật khẩu'], 400);
+        }
+        if ($user->status != 1) {
+            return response(['errorMessage' => 'Tài khoản đã ngừng hoạt động'], 400);
         }
         $match = password_verify($request->password, $user->password_hashed);
         if (!$match) {
-            return response(['errorMessage' => 'Mật khẩu không chính xác'], 400);
+            return response(['errorMessage' => 'Bạn đã nhập sai tên đăng nhập hoặc mật khẩu'], 400);
         }
         
         $payload = JWTFactory::sub($user->id)
             ->myCustomArray([
-                'role' => 'admin',
+                'role' => $request->role,
                 'id' => $user->id,
                 'name' => $user->name,
             ])
