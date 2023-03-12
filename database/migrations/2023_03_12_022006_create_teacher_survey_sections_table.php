@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('teacher_id')->references('id')->on('teachers')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('survey_id')->nullable();
             $table->foreign('survey_id')->references('id')->on('surveys')->cascadeOnUpdate()->nullOnDelete();
-            $table->timestamp('completed_on')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('completed_at');
         });
     }
 

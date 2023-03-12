@@ -11,6 +11,7 @@ class Question extends Model
 {
     use HasFactory;
     
+    public $timestamps = false; 
     protected $guarded = [];
 
     public function survey(): BelongsTo

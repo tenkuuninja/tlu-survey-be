@@ -28,8 +28,7 @@ return new class extends Migration
             $table->foreign('last_modified_by_teacher')->references('id')->on('teachers')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('last_modified_by_admin')->nullable();
             $table->foreign('last_modified_by_admin')->references('id')->on('admins')->cascadeOnUpdate()->nullOnDelete();
-            $table->timestamp('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('last_modified_date')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));;
+            $table->timestamps();
         });
     }
 

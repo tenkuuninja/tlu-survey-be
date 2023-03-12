@@ -9,5 +9,6 @@ class Admin extends Model
 {
     use HasFactory;
     
+    public $timestamps = false; 
     protected $guarded = [];
 }

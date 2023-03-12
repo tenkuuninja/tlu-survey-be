@@ -9,5 +9,6 @@ class SurveyOption extends Model
 {
     use HasFactory;
     
+    public $timestamps = false; 
     protected $guarded = [];
 }
