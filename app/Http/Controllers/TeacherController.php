@@ -38,7 +38,6 @@ class TeacherController extends Controller
             'username' => $request->username,
             'password_hashed' => password_hash($request->password_hashed, PASSWORD_BCRYPT),
             'email' => $request->email,
-            'name' => $request->name,
             'address' => $request->address,
             'phone_number' => $request->phone_number,
             'sex' => $request->sex,
