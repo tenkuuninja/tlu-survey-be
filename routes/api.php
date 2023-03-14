@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/account/login', [AccountController::class, 'login']);
 Route::get('/account/current-user', [AccountController::class, 'get_current_user']);
+Route::post('/account/change-password', [AccountController::class, 'change_password']);
 
 Route::get('/survey', [SurveyController::class, 'index']);
 Route::post('/survey', [SurveyController::class, 'store']);
