@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('dept_id')->nullable();
-            $table->foreign('dept_id')->references('id')->on('departments')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('department_id')->nullable();
+            $table->foreign('department_id')->references('id')->on('departments')->cascadeOnUpdate()->nullOnDelete();
             $table->string('code');
             $table->string('name');
             $table->integer('credit_number');
-            $table->text('description');
-            $table->string('created_name');
-            $table->string('update_name');
+            $table->text('description')->nullable();
+            $table->string('created_name')->nullable();
+            $table->string('update_name')->nullable();
+            $table->timestamps();
         });
     }
 

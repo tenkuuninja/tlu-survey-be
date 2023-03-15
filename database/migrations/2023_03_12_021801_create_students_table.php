@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('department_id')->nullable();
+            $table->foreign('department_id')->references('id')->on('departments')->cascadeOnUpdate()->nullOnDelete();
             $table->string('username')->unique();
             $table->string('password_hashed');
             $table->string('email')->unique();

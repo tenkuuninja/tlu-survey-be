@@ -11,9 +11,13 @@ class SubjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $data = Subject::with('department')
+            ->where('code', 'like', '%' . $request->query('search') . '%')
+            ->orWhere('name', 'like', '%' . $request->query('search') . '%')
+            ->get();
+        return ['data' => $data];
     }
 
     /**
@@ -29,7 +33,14 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Subject::create([
+            'code' => $request->code,
+            'name' => $request->name,
+            'department_id' => $request->department_id,
+            'description' => $request->description,
+            'credit_number' => $request->credit_number,
+        ]);
+        return ['result' => 'success'];
     }
 
     /**
@@ -51,16 +62,24 @@ class SubjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Subject $subject)
+    public function update(Request $request, $id)
     {
-        //
+        $item = Subject::find($id);
+        $item->code = $request->code;
+        $item->name = $request->name;
+        $item->department_id = $request->department_id;
+        $item->description = $request->description;
+        $item->credit_number = $request->credit_number;
+        $item->save();
+        return ['result' => 'success'];
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Subject $subject)
+    public function destroy($id)
     {
-        //
+        Subject::destroy($id);
+        return ['result' => 'success'];
     }
 }

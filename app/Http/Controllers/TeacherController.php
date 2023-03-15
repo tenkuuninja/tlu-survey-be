@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
 use App\Http\Controllers\Controller;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
-class StudentController extends Controller
+class TeacherController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $data = Student::with('department')
+        $data = Teacher::with('department')
             ->where('name', 'like', '%' . $request->query('search') . '%')
             ->get();
         return ['data' => $data];
@@ -32,7 +32,7 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        Student::create([
+        Teacher::create([
             'name' => $request->name,
             'department_id' => $request->department_id,
             'username' => $request->username,
@@ -49,7 +49,7 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
+    public function show(Teacher $teacher)
     {
         //
     }
@@ -57,7 +57,7 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Student $student)
+    public function edit(Teacher $teacher)
     {
         //
     }
@@ -67,7 +67,7 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = Student::find($id);
+        $item = Teacher::find($id);
         $item->name = $request->name;
         $item->department_id = $request->department_id;
         $item->username = $request->username;
@@ -87,7 +87,7 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        Student::destroy($id);
+        Teacher::destroy($id);
         return ['result' => 'success'];
     }
 }

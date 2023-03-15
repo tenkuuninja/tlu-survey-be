@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
+use App\Models\Subject;
 use App\Http\Controllers\Controller;
+use App\Models\Classs;
 use Illuminate\Http\Request;
 
-class StudentController extends Controller
+class ClassController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $data = Student::with('department')
-            ->where('name', 'like', '%' . $request->query('search') . '%')
+        $data = Classs::with('teacher.department')->with('subject.department')
+            ->where('code', 'like', '%' . $request->query('search') . '%')
+            ->orWhere('name', 'like', '%' . $request->query('search') . '%')
             ->get();
         return ['data' => $data];
     }
@@ -32,15 +34,11 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        Student::create([
+        Classs::create([
+            'code' => $request->code,
             'name' => $request->name,
-            'department_id' => $request->department_id,
-            'username' => $request->username,
-            'password_hashed' => password_hash($request->password_hashed, PASSWORD_BCRYPT),
-            'email' => $request->email,
-            'address' => $request->address,
-            'phone_number' => $request->phone_number,
-            'sex' => $request->sex,
+            'subject_id' => $request->subject_id,
+            'teacher_id' => $request->teacher_id,
             'status' => $request->status,
         ]);
         return ['result' => 'success'];
@@ -49,7 +47,7 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
+    public function show(Classs $classs)
     {
         //
     }
@@ -57,7 +55,7 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Student $student)
+    public function edit(Subject $subject)
     {
         //
     }
@@ -67,16 +65,11 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = Student::find($id);
+        $item = Classs::find($id);
+        $item->code = $request->code;
         $item->name = $request->name;
-        $item->department_id = $request->department_id;
-        $item->username = $request->username;
-        $item->password_hashed = password_hash($request->password_hashed, PASSWORD_BCRYPT);
-        $item->email = $request->email;
-        $item->name = $request->name;
-        $item->address = $request->address;
-        $item->phone_number = $request->phone_number;
-        $item->sex = $request->sex;
+        $item->subject_id = $request->subject_id;
+        $item->teacher_id = $request->teacher_id;
         $item->status = $request->status;
         $item->save();
         return ['result' => 'success'];
@@ -87,7 +80,7 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        Student::destroy($id);
+        Classs::destroy($id);
         return ['result' => 'success'];
     }
 }

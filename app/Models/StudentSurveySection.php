@@ -12,4 +12,5 @@ class StudentSurveySection extends Model
     protected $guarded = [];
     
     const CREATED_AT = 'completed_at';
+    const UPDATED_AT = null;
 }
