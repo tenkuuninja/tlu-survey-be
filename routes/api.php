@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,3 +26,5 @@ Route::get('/survey/{id}', [SurveyController::class, 'show']);
 Route::put('/survey/{id}', [SurveyController::class, 'update']);
 Route::delete('/survey/{id}', [SurveyController::class, 'destroy']);
 Route::post('/survey/submit-form', [SurveyController::class, 'submit_form_survey']);
+
+Route::get('/student', [StudentController::class, 'index']);
