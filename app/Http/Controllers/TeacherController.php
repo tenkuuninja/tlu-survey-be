@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
+use App\Models\UserModel;
 use Illuminate\Http\Request;
 
 class TeacherController extends Controller
@@ -13,8 +14,8 @@ class TeacherController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Teacher::with('department')
-            ->where('name', 'like', '%' . $request->query('search') . '%')
+        $data = UserModel::with('department')
+            ->where([['name', 'like', '%' . $request->query('search') . '%'], ['role', 'teacher']])
             ->get();
         return ['data' => $data];
     }
@@ -32,16 +33,17 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-        Teacher::create([
+        UserModel::create([
             'name' => $request->name,
             'department_id' => $request->department_id,
             'username' => $request->username,
-            'password_hashed' => password_hash($request->password_hashed, PASSWORD_BCRYPT),
+            'password' => password_hash($request->password, PASSWORD_BCRYPT),
             'email' => $request->email,
             'address' => $request->address,
             'phone_number' => $request->phone_number,
             'sex' => $request->sex,
             'status' => $request->status,
+            'role' => 'teacher',
         ]);
         return ['result' => 'success'];
     }
@@ -49,7 +51,7 @@ class TeacherController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Teacher $teacher)
+    public function show(UserModel $teacher)
     {
         //
     }
@@ -57,7 +59,7 @@ class TeacherController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Teacher $teacher)
+    public function edit(UserModel $teacher)
     {
         //
     }
@@ -67,11 +69,11 @@ class TeacherController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = Teacher::find($id);
+        $item = UserModel::find($id);
         $item->name = $request->name;
         $item->department_id = $request->department_id;
         $item->username = $request->username;
-        $item->password_hashed = password_hash($request->password_hashed, PASSWORD_BCRYPT);
+        $item->password = password_hash($request->password, PASSWORD_BCRYPT);
         $item->email = $request->email;
         $item->name = $request->name;
         $item->address = $request->address;
@@ -87,7 +89,7 @@ class TeacherController extends Controller
      */
     public function destroy($id)
     {
-        Teacher::destroy($id);
+        UserModel::destroy($id);
         return ['result' => 'success'];
     }
 }

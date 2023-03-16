@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,21 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('teachers', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->foreignId('department_id')->nullable();
             $table->foreign('department_id')->references('id')->on('departments')->cascadeOnUpdate()->nullOnDelete();
             $table->string('username')->unique();
-            $table->string('password_hashed');
+            $table->string('password');
             $table->string('email')->unique();
             $table->string('name');
             $table->string('address');
             $table->string('phone_number');
             $table->integer('sex');
             $table->integer('status');
-            $table->string('created_name')->nullable();
-            $table->string('updated_name')->nullable();
+            $table->string('role')->default('student');
+            $table->foreignId('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
+
         });
     }
 
@@ -35,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teachers');
+        Schema::dropIfExists('users');
     }
 };

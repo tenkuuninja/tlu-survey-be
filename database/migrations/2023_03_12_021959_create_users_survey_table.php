@@ -12,12 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('teacher_survey_sections', function (Blueprint $table) {
+        Schema::create('user_surveys', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('teacher_id')->nullable();
-            $table->foreign('teacher_id')->references('id')->on('teachers')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('survey_id')->nullable();
             $table->foreign('survey_id')->references('id')->on('surveys')->cascadeOnUpdate()->nullOnDelete();
+            $table->boolean('is_finish')->default(false);
             $table->timestamp('completed_at');
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teacher_survey_sections');
+        Schema::dropIfExists('user_surveys');
     }
 };

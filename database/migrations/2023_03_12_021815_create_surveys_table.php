@@ -20,14 +20,10 @@ return new class extends Migration
             $table->string('title')->nullable()->default('');
             $table->string('note')->nullable()->default('');
             $table->integer('status')->nullable()->default(0);
-            $table->foreignId('created_by_teacher')->nullable();
-            $table->foreign('created_by_teacher')->references('id')->on('teachers')->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignId('created_by_admin')->nullable();
-            $table->foreign('created_by_admin')->references('id')->on('admins')->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignId('last_modified_by_teacher')->nullable();
-            $table->foreign('last_modified_by_teacher')->references('id')->on('teachers')->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignId('last_modified_by_admin')->nullable();
-            $table->foreign('last_modified_by_admin')->references('id')->on('admins')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
         });
     }

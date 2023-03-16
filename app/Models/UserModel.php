@@ -6,17 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Teacher extends Model
+class UserModel extends Model
 {
     use HasFactory;
-
+    
+    public $table = 'users';
     protected $guarded = [];
     protected $hidden = [
-        'password_hashed',
+        'password',
     ];
-
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
 
     public function department(): BelongsTo
     {

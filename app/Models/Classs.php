@@ -9,17 +9,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Classs extends Model
 {
     use HasFactory;
-    
+
     protected $guarded = [];
-    
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-    
+
     public function teacher(): BelongsTo
     {
-        return $this->belongsTo(Teacher::class);
+        return $this->belongsTo(User::class);
     }
-    
+
     public function subject(): BelongsTo
     {
         return $this->belongsTo(Subject::class);

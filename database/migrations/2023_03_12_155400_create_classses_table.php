@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('subject_id')->nullable();
             $table->foreign('subject_id')->references('id')->on('subjects')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('teacher_id')->nullable();
-            $table->foreign('teacher_id')->references('id')->on('teachers')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreign('teacher_id')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
             $table->string('code');
             $table->string('name');
             $table->integer('status');
