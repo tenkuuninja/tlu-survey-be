@@ -49,7 +49,7 @@ class ClassController extends Controller
      */
     public function show(Classs $classs)
     {
-        //
+
     }
 
     /**

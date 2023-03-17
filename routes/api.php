@@ -61,3 +61,10 @@ Route::post('/class', [ClassController::class, 'store']);
 Route::get('/class/{id}', [ClassController::class, 'show']);
 Route::put('/class/{id}', [ClassController::class, 'update']);
 Route::delete('/class/{id}', [ClassController::class, 'destroy']);
+
+//hien thi danh sach sinh vien trong lop hoc 
+//them sinh vien trong lop hoc
+//xoa sinh vien khoi lop hoc 
+//xem ket qua dien bieu mau cua sinh vien/giang vien
+//thong ke khao sat
+//cai dat bieu mau : chon doi tuong khao sat 
