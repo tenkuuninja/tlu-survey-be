@@ -15,9 +15,9 @@ return new class extends Migration
         Schema::create('user_surveys', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('survey_id')->nullable();
-            $table->foreign('survey_id')->references('id')->on('surveys')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreign('survey_id')->references('id')->on('surveys')->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('is_finish')->default(false);
             $table->timestamp('completed_at');
         });

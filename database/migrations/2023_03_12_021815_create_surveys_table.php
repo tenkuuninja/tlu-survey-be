@@ -14,8 +14,6 @@ return new class extends Migration
     {
         Schema::create('surveys', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('survey_option_id')->nullable();
-            $table->foreign('survey_option_id')->references('id')->on('survey_options')->cascadeOnUpdate()->nullOnDelete();
             $table->string('code');
             $table->string('title')->nullable()->default('');
             $table->string('note')->nullable()->default('');

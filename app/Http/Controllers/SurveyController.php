@@ -11,6 +11,7 @@ use App\Models\StudentSurveySection;
 use App\Models\TeacherSurveySection;
 use App\Models\UserSurvey;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class SurveyController extends Controller
@@ -20,6 +21,8 @@ class SurveyController extends Controller
      */
     public function index(Request $request)
     {
+        $whereClause = [];
+
         $data = Survey::with('questions.options')
             ->where('title', 'like', '%' . $request->query('search') . '%')
             ->get();
@@ -43,34 +46,44 @@ class SurveyController extends Controller
     {
         // var_dump($request);
         $body = $request->all();
-        $survey = Survey::create([
-            'code' => Str::uuid(),
-            'title' => $body['title'],
-            'note' => '123',
-            'status' => 1,
-        ]);
-        if (is_array($body['questions'])) {
-            foreach ($body['questions'] as $i => $q) {
-                $question = Question::create([
-                    'survey_id' => $survey->id,
-                    'type_id' => $q['type_id'],
-                    'title' => $q['title'],
-                    'required' => $q['required'],
-                    'question_no' => $i,
-                ]);
-                if (is_array($q['options'])) {
-                    foreach ($q['options'] as $j => $option) {
-                        $newOption = Option::create([
-                            'question_id' => $question->id,
-                            'title' => $option['title'],
-                            'option_no' => $j,
-                        ]);
+        DB::beginTransaction();
+        try {
+            //code...
+
+            $survey = Survey::create([
+                'code' => Str::uuid(),
+                'title' => $body['title'],
+                'note' => '123',
+                'status' => 1,
+            ]);
+            if (is_array($body['questions'])) {
+                foreach ($body['questions'] as $i => $q) {
+                    $question = Question::create([
+                        'survey_id' => $survey->id,
+                        'type_id' => $q['type_id'],
+                        'title' => $q['title'],
+                        'required' => $q['required'],
+                        'question_no' => $i,
+                    ]);
+                    if (is_array($q['options'])) {
+                        foreach ($q['options'] as $j => $option) {
+                            $newOption = Option::create([
+                                'question_id' => $question->id,
+                                'title' => $option['title'],
+                                'option_no' => $j,
+                            ]);
+                        }
                     }
                 }
             }
-        }
+            DB::commit();
 
-        return ['result' => 'success'];
+            return ['result' => 'success'];
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response(['errorMessage' => 'Đã xảy ra lỗi không xác định', 'info' => $th], 400);
+        }
     }
 
     /**
@@ -78,7 +91,7 @@ class SurveyController extends Controller
      */
     public function show($id)
     {
-        $data = Survey::with('questions.options')->where('id', $id)->get();
+        $data = Survey::with('questions.options')->with('option')->where('id', $id)->get();
         return ['data' => $data[0]];
     }
 
@@ -160,17 +173,43 @@ class SurveyController extends Controller
     public function submit_form_survey(Request $request)
     {
         $body = $request->all();
+
+        // $userSurvey = UserSurvey::where('user_id', $body['section']['user_id'])
+        //     ->where('survey_id', $body['section']['survey_id'])
+        //     ->first();
+
+        // if ($userSurvey) {
+        //     $userSurvey->is_finish = true;
+        //     $userSurvey->save();
+        // } else {
+        //     UserSurvey::create([
+        //         'user_id' => $body['section']['user_id'],
+        //         'survey_id' => $body['section']['survey_id'],
+        //         'is_finish' => true,
+        //     ]);
+        // }
+
+        UserSurvey::updateOrCreate([
+            'user_id' => $body['section']['user_id'],
+            'survey_id' => $body['section']['survey_id'],
+        ], [
+            'is_finish' => true,
+        ]);
+
+        Answer::where('user_id', $body['section']['user_id'])
+            ->where('survey_id', $body['section']['survey_id'])
+            ->delete();
         Answer::insert($body['answers']);
-        UserSurvey::create($body['teacher_section']);
         return ['result' => 'success'];
     }
+
     public function show_survey_answer($user_id, $survey_id)
     {
         $answer = DB::table('answers')
-                        ->where('survey_id','=',$survey_id)
-                        ->where('user_id','=',$user_id)
-                        ->get();
+            ->where('survey_id', '=', $survey_id)
+            ->where('user_id', '=', $user_id)
+            ->get();
 
-        return ['answer' => $answer];
+        return ['data' => $answer];
     }
 }

@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('department_id')->nullable();
             $table->foreign('department_id')->references('id')->on('departments')->cascadeOnUpdate()->nullOnDelete();
+            $table->string('code')->nullable();
             $table->string('username')->unique();
             $table->string('password');
             $table->string('email')->unique();
             $table->string('name');
             $table->string('address');
             $table->string('phone_number');
+            $table->string('citizen_id')->nullable();
             $table->integer('sex');
             $table->integer('status');
             $table->string('role')->default('student');

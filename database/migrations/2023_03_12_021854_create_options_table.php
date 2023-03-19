@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('options', function (Blueprint $table) {
             $table->id();
             $table->foreignId('question_id')->nullable();
-            $table->foreign('question_id')->references('id')->on('questions')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreign('question_id')->references('id')->on('questions')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('title');
             $table->integer('option_no');
         });

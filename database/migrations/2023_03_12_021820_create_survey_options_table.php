@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('survey_options', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('survey_id')->nullable();
+            $table->foreign('survey_id')->references('id')->on('surveys')->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('limit')->default(0);
             $table->boolean('process_bar')->default(0);
             $table->boolean('shuffle_question_order')->default(0);
