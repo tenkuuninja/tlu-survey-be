@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('survey_id')->nullable();
+            $table->foreign('survey_id')->references('id')->on('surveys')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('question_id')->nullable();
             $table->foreign('question_id')->references('id')->on('questions')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('option_id')->nullable();

@@ -9,6 +9,7 @@ use App\Models\Option;
 use App\Models\Question;
 use App\Models\StudentSurveySection;
 use App\Models\TeacherSurveySection;
+use App\Models\UserSurvey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -160,12 +161,16 @@ class SurveyController extends Controller
     {
         $body = $request->all();
         Answer::insert($body['answers']);
-        if ($body['type'] == 'teacher') {
-            TeacherSurveySection::create($body['teacher_section']);
-        }
-        if ($body['type'] == 'student') {
-            StudentSurveySection::create($body['student_section']);
-        }
+        UserSurvey::create($body['teacher_section']);
         return ['result' => 'success'];
+    }
+    public function show_survey_answer($user_id, $survey_id)
+    {
+        $answer = DB::table('answers')
+                        ->where('survey_id','=',$survey_id)
+                        ->where('user_id','=',$user_id)
+                        ->get();
+
+        return ['answer' => $answer];
     }
 }

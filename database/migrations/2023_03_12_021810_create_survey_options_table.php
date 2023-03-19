@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('process_bar')->default(0);
             $table->boolean('shuffle_question_order')->default(0);
             $table->boolean('view_results')->default(0);
+            $table->boolean('public')->default(0);
         });
     }
 

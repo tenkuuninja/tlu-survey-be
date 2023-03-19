@@ -35,6 +35,7 @@ Route::get('/survey/{id}', [SurveyController::class, 'show']);
 Route::put('/survey/{id}', [SurveyController::class, 'update']);
 Route::delete('/survey/{id}', [SurveyController::class, 'destroy']);
 Route::post('/survey/submit-form', [SurveyController::class, 'submit_form_survey']);
+Route::get('/survey/show/{user_id}/{survey_id}', [SurveyController::class, 'show_survey_answer']);
 
 Route::get('/department', [DepartmentController::class, 'index']);
 
@@ -63,11 +64,10 @@ Route::put('/class/{id}', [ClassController::class, 'update']);
 Route::delete('/class/{id}', [ClassController::class, 'destroy']);
 
 //hien thi danh sach sinh vien trong lop hoc 
-Route::get('/class/student',[ClassController::class, 'show'])
+Route::get('/class/student', [ClassController::class, 'show']);
 //them sinh vien trong lop hoctro
-Route::post('/class/student',[ClassController::class, 'add'])
-//xoa sinh vien khoi lop hoc
-Route::delete('/class/student',[ClassCtroller::class, 'delete']) 
+Route::post('/class/student', [ClassController::class, 'add']);
+//xoa sinh vien khoi lop hoc 
 //xem ket qua dien bieu mau cua sinh vien/giang vien
 //thong ke khao sat
 //cai dat bieu mau : chon doi tuong khao sat 
