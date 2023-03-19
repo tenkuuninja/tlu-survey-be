@@ -50,10 +50,17 @@ class ClassController extends Controller
      */
     public function show(Classs $classs)
     {
+<<<<<<< HEAD
         $data = Usermodel::with('Classs')->with('student_classes')
             ->where('role', 'student')
             ->where('users.id', 'student_classes.user_id')
             ->where('student_class.class_id', 'class.id')
+=======
+        $data=Usermodel::with('Classs')->with('StudentClass')
+            ->where('role','student')
+            ->where('users.id','student_classes.user_id')
+            ->where('student_class.class_id','class.id')
+>>>>>>> 2eb6c171372363ac80f8e637e40a8afed0954a9a
             ->get();
         return ['data' => $data];
     }
@@ -93,8 +100,18 @@ class ClassController extends Controller
     /**
      * Add more student to class
      */
-    public function add(Classs $class)
+    Public function add(Request $request)
     {
-        // Classs::
+        StudentClass::create([
+            'user_id'=> $request->user_id
+            'class_id'=> $request->class_id
+        ]);
+        return ['result'=> 'success'];
+    }
+
+    Public function delete($id)
+    {
+        StudentClass::delete($user_id);
+        return ['result' => 'success'];
     }
 }
