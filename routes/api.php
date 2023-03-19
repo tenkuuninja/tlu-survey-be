@@ -68,6 +68,7 @@ Route::get('/class/student', [ClassController::class, 'show']);
 //them sinh vien trong lop hoctro
 Route::post('/class/student',[ClassController::class, 'add'])
 //xoa sinh vien khoi lop hoc 
+Route::delete('/class/student',[ClassCtroller::class, 'delete']) 
 //xem ket qua dien bieu mau cua sinh vien/giang vien
 //thong ke khao sat
 //cai dat bieu mau : chon doi tuong khao sat 
