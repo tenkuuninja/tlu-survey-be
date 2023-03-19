@@ -93,8 +93,18 @@ class ClassController extends Controller
     /**
      * Add more student to class
      */
-    Public function add(Classs $class)
+    Public function add(Request $request)
     {
-        Classs::
+        StudentClass::create([
+            'user_id'=> $request->user_id
+            'class_id'=> $request->class_id
+        ]);
+        return ['result'=> 'success'];
+    }
+
+    Public function delete($id)
+    {
+        StudentClass::delete($user_id);
+        return ['result' => 'success'];
     }
 }
