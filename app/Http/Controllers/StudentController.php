@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
 use App\Http\Controllers\Controller;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
@@ -43,6 +42,7 @@ class StudentController extends Controller
             'phone_number' => $request->phone_number,
             'sex' => $request->sex,
             'status' => $request->status,
+            'role' => 'student',
         ]);
         return ['result' => 'success'];
     }
