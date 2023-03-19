@@ -168,4 +168,13 @@ class SurveyController extends Controller
         }
         return ['result' => 'success'];
     }
+    public function show_survey_answer($user_id, $survey_id)
+    {
+        $answer = DB::table('answers')
+                        ->where('survey_id','=',$survey_id)
+                        ->where('user_id','=',$user_id)
+                        ->get();
+
+        return ['answer' => $answer];
+    }
 }

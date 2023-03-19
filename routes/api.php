@@ -35,6 +35,7 @@ Route::get('/survey/{id}', [SurveyController::class, 'show']);
 Route::put('/survey/{id}', [SurveyController::class, 'update']);
 Route::delete('/survey/{id}', [SurveyController::class, 'destroy']);
 Route::post('/survey/submit-form', [SurveyController::class, 'submit_form_survey']);
+Route::get('/survey/show/{user_id}/{survey_id}', [SurveyController::class, 'show_survey_answer']);
 
 Route::get('/department', [DepartmentController::class, 'index']);
 
