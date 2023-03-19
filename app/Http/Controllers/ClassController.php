@@ -50,7 +50,7 @@ class ClassController extends Controller
      */
     public function show(Classs $classs)
     {
-        $data=Usermodel::with('Classs')->with('student_classes')
+        $data=Usermodel::with('Classs')->with('StudentClass')
             ->where('role','student')
             ->where('users.id','student_classes.user_id')
             ->where('student_class.class_id','class.id')
