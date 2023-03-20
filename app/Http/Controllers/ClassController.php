@@ -50,17 +50,10 @@ class ClassController extends Controller
      */
     public function show(Classs $classs)
     {
-<<<<<<< HEAD
-        $data = Usermodel::with('Classs')->with('student_classes')
-            ->where('role', 'student')
-            ->where('users.id', 'student_classes.user_id')
-            ->where('student_class.class_id', 'class.id')
-=======
         $data=Usermodel::with('Classs')->with('StudentClass')
             ->where('role','student')
             ->where('users.id','student_classes.user_id')
             ->where('student_class.class_id','class.id')
->>>>>>> 2eb6c171372363ac80f8e637e40a8afed0954a9a
             ->get();
         return ['data' => $data];
     }
