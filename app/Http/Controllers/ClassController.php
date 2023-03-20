@@ -51,9 +51,11 @@ class ClassController extends Controller
     public function show(Classs $classs)
     {
         $data=Usermodel::with('Classs')->with('StudentClass')
-            ->where('role','student')
-            ->where('users.id','student_classes.user_id')
-            ->where('student_class.class_id','class.id')
+            ->where([
+            ['role','student'],
+            ['users.id','student_classes.user_id'],
+            ['student_class.class_id','class.id']
+            ])
             ->get();
         return ['data' => $data];
     }
@@ -104,7 +106,7 @@ class ClassController extends Controller
 
     Public function delete($id)
     {
-        StudentClass::delete($user_id);
+        StudentClass::destroy($user_id);
         return ['result' => 'success'];
     }
 }
