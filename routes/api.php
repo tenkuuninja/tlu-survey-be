@@ -65,15 +65,9 @@ Route::put('/class/{id}', [ClassController::class, 'update']);
 Route::delete('/class/{id}', [ClassController::class, 'destroy']);
 
 //hien thi danh sach sinh vien trong lop hoc 
-<<<<<<< Updated upstream
 Route::get('/class/student', [ClassController::class, 'show']);
 //them sinh vien trong lop hoctro
 Route::post('/class/student', [ClassController::class, 'show', 'add']);
-=======
-Route::get('/class/student',[ClassController::class, 'show']);
-//them sinh vien trong lop hoctro
-Route::post('/class/student',[ClassController::class, 'add']);
->>>>>>> Stashed changes
 //xoa sinh vien khoi lop hoc 
 Route::delete('/class/student', [ClassCtroller::class, 'show', 'delete']);
 //xem ket qua dien bieu mau cua sinh vien/giang vien
