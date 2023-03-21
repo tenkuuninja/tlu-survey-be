@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\GradeLevelController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SurveyController;
@@ -39,6 +40,7 @@ Route::get('/survey/{survey_id}/answer', [SurveyController::class, 'show_all_ans
 Route::get('/survey/{survey_id}/answer/{user_id}', [SurveyController::class, 'show_survey_answer']);
 
 Route::get('/department', [DepartmentController::class, 'index']);
+Route::get('/grade-level', [GradeLevelController::class, 'index']);
 
 Route::get('/student', [StudentController::class, 'index']);
 Route::post('/student', [StudentController::class, 'store']);
