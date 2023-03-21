@@ -103,8 +103,8 @@ class ClassController extends Controller
     public function add(Request $request)
     {
         StudentClass::create([
-            'user_id' => $request->user_id,
-            'class_id' => $request->class_id
+            'user_id'=> $request->user_id,
+            'class_id'=> $request->class_id
         ]);
         return ['result' => 'success'];
     }
