@@ -58,7 +58,11 @@ class ClassController extends Controller
                 ['student_class.class_id', 'class.id']
             ])
             ->get();
+<<<<<<< Updated upstream
         return ['data' => $data];
+=======
+        return['data' => $data];
+>>>>>>> Stashed changes
     }
 
     /**
