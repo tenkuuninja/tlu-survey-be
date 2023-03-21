@@ -8,11 +8,13 @@ use App\Models\Answer;
 use App\Models\Option;
 use App\Models\Question;
 use App\Models\StudentSurveySection;
+use App\Models\SurveyOption;
 use App\Models\TeacherSurveySection;
 use App\Models\UserSurvey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+
 
 class SurveyController extends Controller
 {
@@ -205,5 +207,63 @@ class SurveyController extends Controller
             ->get();
 
         return ['data' => $answer];
+    }
+    public function option(Request $request, $survey_id)
+    {   
+        $body = $request->all();
+        try {
+            //code...
+            DB::table('survey_options')->insert(
+                array(
+                    'survey_id' => $survey_id,
+                    'limit' => $body['limit'],
+                    'shuffle_question_order' => $body['shuffle_question_order'],
+                    'view_results'=>  $body['view_results'],
+                    'public' => $body['public'],
+                    'class_id' =>$body['class_id'],
+                    'user_surveys' =>$body['user_surveys']
+                )
+            );
+            //add survey by class
+            if (is_array($body['class_ids']) )
+            {
+                foreach ($body['class_ids'] as $i => $class_id)//tim list user id theo class_id
+                {
+                    $list_user_id = DB::table('student_classes')->where('class_id', '=', $class_id)->lists('user_id');
+                    foreach ($list_user_id as $key1 => $user_id) {
+                        # code...
+                        DB::table('user_surveys')->insert(
+                            array(
+                                'user_id' => $user_id,
+                                'survey_id' => $survey_id,
+                            )
+                        );
+
+                    }
+
+                }
+                 
+            }
+            //add survey by user id
+            if(is_array($body['user_surveys'])){
+                foreach ($body['user_surveys'] as $key2 => $user_id) {
+                    # code...
+                    DB::table('user_surveys')->insert(
+                        array(
+                            'user_id' => $user_id,
+                            'survey_id' => $survey_id,
+                        )
+                    );
+
+                }
+            }
+
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response(['errorMessage' => 'Đã xảy ra lỗi không xác định', 'info' => $th], 400);
+        }
+        
+
     }
 }

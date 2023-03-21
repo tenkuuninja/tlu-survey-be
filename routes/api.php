@@ -73,3 +73,4 @@ Route::delete('/class/student', [ClassCtroller::class, 'show', 'delete']);
 //xem ket qua dien bieu mau cua sinh vien/giang vien
 //thong ke khao sat
 //cai dat bieu mau : chon doi tuong khao sat 
+Route::put('/survey/{id}/option', [SurveyController::class, 'option']);
