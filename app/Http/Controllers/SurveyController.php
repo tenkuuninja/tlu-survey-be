@@ -244,7 +244,7 @@ class SurveyController extends Controller
                 }
                  
             }
-            //add survey by user id
+            //add survey by userid
             if(is_array($body['user_surveys'])){
                 foreach ($body['user_surveys'] as $key2 => $user_id) {
                     # code...
