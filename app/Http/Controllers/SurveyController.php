@@ -174,21 +174,6 @@ class SurveyController extends Controller
     {
         $body = $request->all();
 
-        // $userSurvey = UserSurvey::where('user_id', $body['section']['user_id'])
-        //     ->where('survey_id', $body['section']['survey_id'])
-        //     ->first();
-
-        // if ($userSurvey) {
-        //     $userSurvey->is_finish = true;
-        //     $userSurvey->save();
-        // } else {
-        //     UserSurvey::create([
-        //         'user_id' => $body['section']['user_id'],
-        //         'survey_id' => $body['section']['survey_id'],
-        //         'is_finish' => true,
-        //     ]);
-        // }
-
         UserSurvey::updateOrCreate([
             'user_id' => $body['section']['user_id'],
             'survey_id' => $body['section']['survey_id'],
@@ -203,7 +188,16 @@ class SurveyController extends Controller
         return ['result' => 'success'];
     }
 
-    public function show_survey_answer($user_id, $survey_id)
+    public function show_all_answer_by_survey($survey_id)
+    {
+        $answer = DB::table('answers')
+            ->where('survey_id', '=', $survey_id)
+            ->get();
+
+        return ['data' => $answer];
+    }
+
+    public function show_survey_answer($survey_id, $user_id)
     {
         $answer = DB::table('answers')
             ->where('survey_id', '=', $survey_id)
