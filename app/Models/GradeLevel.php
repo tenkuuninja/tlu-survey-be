@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class GradeLevel extends Model
 {
     use HasFactory;
+    
+    public $timestamps = false; 
+    protected $guarded = [];
 }

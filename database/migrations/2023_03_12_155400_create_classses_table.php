@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreign('teacher_id')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
             $table->string('code');
             $table->string('name');
-            $table->integer('status');
+            $table->integer('status')->default(1);
             $table->string('created_name')->nullable();
             $table->string('updated_name')->nullable();
             $table->timestamps();

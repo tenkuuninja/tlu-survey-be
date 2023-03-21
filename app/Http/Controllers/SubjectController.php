@@ -33,6 +33,10 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
+        if (Subject::where('code', $request->code)->exists()) {
+            return response(['errorMessage' => 'Mã môn đã tồn tại'], 400);
+        }
+
         Subject::create([
             'code' => $request->code,
             'name' => $request->name,
@@ -64,6 +68,11 @@ class SubjectController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user = Subject::find($id);
+        if ($user->code != $request->code && Subject::where('code', $request->code)->exists()) {
+            return response(['errorMessage' => 'Mã môn đã tồn tại'], 400);
+        }
+
         $item = Subject::find($id);
         $item->code = $request->code;
         $item->name = $request->name;

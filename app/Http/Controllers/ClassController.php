@@ -36,9 +36,14 @@ class ClassController extends Controller
      */
     public function store(Request $request)
     {
+        if (Classs::where('code', $request->code)->exists()) {
+            return response(['errorMessage' => 'Mã lớp đã tồn tại'], 400);
+        }
+
         Classs::create([
             'code' => $request->code,
             'name' => $request->name,
+            'grade_level_id' => $request->grade_level_id,
             'subject_id' => $request->subject_id,
             'teacher_id' => $request->teacher_id,
             'status' => $request->status,
@@ -51,18 +56,14 @@ class ClassController extends Controller
      */
     public function show(Classs $classs)
     {
-        $data = Usermodel::with('Classs')->with('StudentClass')
+        $data = UserModel::with('Classs')->with('StudentClass')
             ->where([
                 ['role', 'student'],
                 ['users.id', 'student_classes.user_id'],
                 ['student_class.class_id', 'class.id']
             ])
             ->get();
-<<<<<<< Updated upstream
         return ['data' => $data];
-=======
-        return['data' => $data];
->>>>>>> Stashed changes
     }
 
     /**
@@ -78,9 +79,15 @@ class ClassController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user = Classs::find($id);
+        if ($user->code != $request->code && Classs::where('code', $request->code)->exists()) {
+            return response(['errorMessage' => 'Mã lớp đã tồn tại'], 400);
+        }
+
         $item = Classs::find($id);
         $item->code = $request->code;
         $item->name = $request->name;
+        $item->grade_level_id = $request->grade_level_id;
         $item->subject_id = $request->subject_id;
         $item->teacher_id = $request->teacher_id;
         $item->status = $request->status;
@@ -103,8 +110,8 @@ class ClassController extends Controller
     public function add(Request $request)
     {
         StudentClass::create([
-            'user_id'=> $request->user_id,
-            'class_id'=> $request->class_id
+            'user_id' => $request->user_id,
+            'class_id' => $request->class_id
         ]);
         return ['result' => 'success'];
     }
