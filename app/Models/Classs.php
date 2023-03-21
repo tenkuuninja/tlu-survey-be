@@ -17,7 +17,7 @@ class Classs extends Model
 
     public function teacher(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(UserModel::class);
     }
 
     public function subject(): BelongsTo

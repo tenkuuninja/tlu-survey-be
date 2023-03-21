@@ -6,6 +6,7 @@ use App\Models\UserModel;
 use App\Models\Subject;
 use App\Http\Controllers\Controller;
 use App\Models\Classs;
+use App\Models\StudentClass;
 use Illuminate\Http\Request;
 
 class ClassController extends Controller
@@ -50,11 +51,11 @@ class ClassController extends Controller
      */
     public function show(Classs $classs)
     {
-        $data=Usermodel::with('Classs')->with('StudentClass')
+        $data = Usermodel::with('Classs')->with('StudentClass')
             ->where([
-            ['role','student'],
-            ['users.id','student_classes.user_id'],
-            ['student_class.class_id','class.id']
+                ['role', 'student'],
+                ['users.id', 'student_classes.user_id'],
+                ['student_class.class_id', 'class.id']
             ])
             ->get();
         return ['data' => $data];
@@ -95,18 +96,18 @@ class ClassController extends Controller
     /**
      * Add more student to class
      */
-    Public function add(Request $request)
+    public function add(Request $request)
     {
         StudentClass::create([
-            'user_id'=> $request->user_id
-            'class_id'=> $request->class_id
+            'user_id' => $request->user_id,
+            'class_id' => $request->class_id
         ]);
-        return ['result'=> 'success'];
+        return ['result' => 'success'];
     }
 
-    Public function delete($id)
+    public function delete($id)
     {
-        StudentClass::destroy($user_id);
+        StudentClass::destroy($id);
         return ['result' => 'success'];
     }
 }
