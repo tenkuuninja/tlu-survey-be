@@ -16,6 +16,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('subject_id')->nullable();
             $table->foreign('subject_id')->references('id')->on('subjects')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('grade_level_id')->nullable();
+            $table->foreign('grade_level_id')->references('id')->on('grade_levels')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('teacher_id')->nullable();
             $table->foreign('teacher_id')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
             $table->string('code');
