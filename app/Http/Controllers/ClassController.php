@@ -139,10 +139,10 @@ class ClassController extends Controller
     {
         StudentClass::updateOrCreate([
             'class_id' => $class_id,
-            'user_id' => $student_id,
+            'student_id' => $student_id,
         ], [
             'class_id' => $class_id,
-            'user_id' => $student_id,
+            'student_id' => $student_id,
         ]);
         return ['result' => 'success'];
     }
@@ -151,8 +151,8 @@ class ClassController extends Controller
     {
         StudentClass::where([
             'class_id' => $class_id,
-            'user_id' => $student_id,
-        ])->delete();
+            'student_id' => $student_id,
+        ])->first()->delete();
         return ['result' => 'success'];
     }
 }
