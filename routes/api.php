@@ -38,6 +38,7 @@ Route::delete('/survey/{id}', [SurveyController::class, 'destroy']);
 Route::post('/survey/submit-form', [SurveyController::class, 'submit_form_survey']);
 Route::get('/survey/{survey_id}/answer', [SurveyController::class, 'show_all_answer_by_survey']);
 Route::get('/survey/{survey_id}/answer/{user_id}', [SurveyController::class, 'show_survey_answer']);
+Route::get('/survey/{id}/option', [SurveyController::class, 'get_option']);
 
 Route::get('/department', [DepartmentController::class, 'index']);
 Route::get('/grade-level', [GradeLevelController::class, 'index']);
@@ -78,4 +79,4 @@ Route::delete('/class/student', [ClassCtroller::class, 'show', 'delete']);
 //xem ket qua dien bieu mau cua sinh vien/giang vien
 //thong ke khao sat
 //cai dat bieu mau : chon doi tuong khao sat 
-Route::put('/survey/{id}/option', [SurveyController::class, 'option']);
+Route::put('/survey/{id}/option', [SurveyController::class, 'update_option']);

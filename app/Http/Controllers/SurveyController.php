@@ -5,16 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Survey;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
+use App\Models\Classs;
 use App\Models\Option;
 use App\Models\Question;
+use App\Models\StudentClass;
 use App\Models\StudentSurveySection;
 use App\Models\SurveyOption;
 use App\Models\TeacherSurveySection;
+use App\Models\UserModel;
 use App\Models\UserSurvey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-
+use User;
 
 class SurveyController extends Controller
 {
@@ -23,9 +26,9 @@ class SurveyController extends Controller
      */
     public function index(Request $request)
     {
-        $whereClause = [];
-
         $data = Survey::with('questions.options')
+            ->with('option')
+            ->with('user_surveys.user')
             ->where('title', 'like', '%' . $request->query('search') . '%')
             ->get();
         return [
@@ -84,7 +87,7 @@ class SurveyController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
-            return response(['errorMessage' => 'Đã xảy ra lỗi không xác định', 'info' => $th], 400);
+            return response(['errorMessage' => 'Đã xảy ra lỗi không xác định', 'info' => $th], 500);
         }
     }
 
@@ -192,7 +195,10 @@ class SurveyController extends Controller
 
     public function show_all_answer_by_survey($survey_id)
     {
-        $answer = DB::table('answers')
+        $answer = Answer::with('user')
+            ->with('survey')
+            ->with('question')
+            ->with('option')
             ->where('survey_id', '=', $survey_id)
             ->get();
 
@@ -201,69 +207,97 @@ class SurveyController extends Controller
 
     public function show_survey_answer($survey_id, $user_id)
     {
-        $answer = DB::table('answers')
+        $answer = Answer::with('user')
+            ->with('survey')
+            ->with('question')
+            ->with('option')
             ->where('survey_id', '=', $survey_id)
             ->where('user_id', '=', $user_id)
             ->get();
 
         return ['data' => $answer];
     }
-    public function option(Request $request, $survey_id)
-    {   
-        $body = $request->all();
+
+    public function get_option($id)
+    {
+        $option = SurveyOption::where('survey_id', $id)->first();
+        if (!$option) {
+            return ['data' => null];
+        }
+
+        $class_ids = explode(',', $option->classes);
+        $classes = [];
+        if (count($class_ids) > 0) {
+            $classes = Classs::whereIn('id', $class_ids)->get();
+        }
+        $student_ids = [];
+        $user_surveys = UserSurvey::where('survey_id', $id)->select('user_id')->get();
+        foreach ($user_surveys as $user_survey) {
+            array_push($student_ids, $user_survey->user_id);
+        }
+        $students = UserModel::where('role', 'student')
+            ->whereIn('id', UserSurvey::where('survey_id', $id)->select('user_id')->get())
+            ->get();
+
+        return [
+            'data' => $option,
+            'students' => $students,
+            'classes' => $classes,
+        ];
+    }
+
+    public function update_option(Request $request, $survey_id)
+    {
         try {
-            //code...
-            DB::table('survey_options')->insert(
-                array(
-                    'survey_id' => $survey_id,
-                    'limit' => $body['limit'],
-                    'shuffle_question_order' => $body['shuffle_question_order'],
-                    'view_results'=>  $body['view_results'],
-                    'public' => $body['public'],
-                    'class_id' =>$body['class_id'],
-                    'user_surveys' =>$body['user_surveys']
-                )
-            );
-            //add survey by class
-            if (is_array($body['class_ids']) )
-            {
-                foreach ($body['class_ids'] as $i => $class_id)//tim list user id theo class_id
+            DB::beginTransaction();
+
+            $body = $request->all();
+            SurveyOption::updateOrCreate([
+                'survey_id' => $survey_id
+            ], [
+                'survey_id' => $survey_id,
+                'limit' => $body['limit'],
+                'shuffle_question_order' => $body['shuffle_question_order'],
+                'view_results' =>  $body['view_results'],
+                'public' => $body['public'],
+            ]);
+            if (is_array($body['class_ids'])) {
+                foreach ($body['class_ids'] as $class_id) //tim list user id theo class_id
                 {
-                    $list_user_id = DB::table('student_classes')->where('class_id', '=', $class_id)->lists('user_id');
-                    foreach ($list_user_id as $key1 => $user_id) {
-                        # code...
-                        DB::table('user_surveys')->insert(
-                            array(
-                                'user_id' => $user_id,
-                                'survey_id' => $survey_id,
-                            )
-                        );
-
+                    $student_classes = StudentClass::where('class_id', $class_id)->get();
+                    foreach ($student_classes as $key1 => $student_class) {
+                        UserSurvey::updateOrCreate([
+                            'user_id' => $student_class->user_id,
+                            'survey_id' => $survey_id,
+                        ], [
+                            'user_id' => $student_class->user_id,
+                            'survey_id' => $survey_id
+                        ]);
                     }
-
+                    SurveyOption::where('survey_id', $survey_id)->update([
+                        'classes' => implode(',', $body['class_ids'])
+                    ]);
                 }
-                 
             }
             //add survey by userid
-            if(is_array($body['user_surveys'])){
-                foreach ($body['user_surveys'] as $key2 => $user_id) {
-                    # code...
-                    DB::table('user_surveys')->insert(
-                        array(
-                            'user_id' => $user_id,
-                            'survey_id' => $survey_id,
-                        )
-                    );
-
+            if (is_array($body['student_ids'])) {
+                foreach ($body['student_ids'] as $user_id) {
+                    UserSurvey::updateOrCreate([
+                        'user_id' => $user_id,
+                        'survey_id' => $survey_id,
+                    ], [
+                        'user_id' => $user_id,
+                        'survey_id' => $survey_id,
+                    ]);
                 }
             }
 
-
+            DB::commit();
+            return ['result' => 'success'];
         } catch (\Throwable $th) {
-            //throw $th;
+            DB::rollBack();
+            throw $th;
             return response(['errorMessage' => 'Đã xảy ra lỗi không xác định', 'info' => $th], 400);
         }
-        
-
     }
 }
