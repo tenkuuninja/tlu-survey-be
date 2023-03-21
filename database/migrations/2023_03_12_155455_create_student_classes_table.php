@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('student_classes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('student_id')->nullable();
+            $table->foreign('student_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('class_id')->nullable();
             $table->foreign('class_id')->references('id')->on('classses')->cascadeOnUpdate()->cascadeOnDelete();
         });

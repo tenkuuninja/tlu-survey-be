@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Classs;
 use App\Models\Department;
 use App\Models\GradeLevel;
+use App\Models\StudentClass;
 use App\Models\Subject;
 use App\Models\Type;
 use App\Models\User;
@@ -213,6 +214,25 @@ class DatabaseSeeder extends Seeder
                 'code' => "TRR_K62_01",
                 'name' => 'Toán rời rạc lớp abc',
                 'status' => 1,
+            ],
+        ]);
+
+        StudentClass::factory()->createMany([
+            [
+                'student_id' => 4,
+                'class_id' => 1,
+            ],
+            [
+                'student_id' => 5,
+                'class_id' => 1,
+            ],
+            [
+                'student_id' => 4,
+                'class_id' => 2,
+            ],
+            [
+                'student_id' => 5,
+                'class_id' => 3,
             ],
         ]);
     }

@@ -63,10 +63,9 @@ Route::post('/class', [ClassController::class, 'store']);
 Route::get('/class/{id}', [ClassController::class, 'show']);
 Route::put('/class/{id}', [ClassController::class, 'update']);
 Route::delete('/class/{id}', [ClassController::class, 'destroy']);
-
 Route::get('/class/{id}/student', [ClassController::class, 'get_list_student']);
 Route::post('/class/{class_id}/student/{student_id}', [ClassController::class, 'add_student_to_class']);
-Route::delete('/class/{class_id}/student/{student_id}', [ClassController::class, 'delete_student_to_class']);
+Route::delete('/class/{class_id}/student/{student_id}', [ClassController::class, 'delete_student_from_class']);
 
 //hien thi danh sach sinh vien trong lop hoc 
 Route::get('/class/student', [ClassController::class, 'show']);

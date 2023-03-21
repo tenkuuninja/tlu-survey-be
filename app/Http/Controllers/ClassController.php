@@ -121,4 +121,38 @@ class ClassController extends Controller
         StudentClass::destroy($id);
         return ['result' => 'success'];
     }
+
+    public function get_list_student($id,)
+    {
+        $class = Classs::with('student_classes.student')->find($id);
+
+        $students = [];
+
+        foreach ($class->student_classes as $record) {
+            array_push($students, $record->student);
+        }
+
+        return ['data' => $students];
+    }
+
+    public function add_student_to_class($class_id, $student_id)
+    {
+        StudentClass::updateOrCreate([
+            'class_id' => $class_id,
+            'user_id' => $student_id,
+        ], [
+            'class_id' => $class_id,
+            'user_id' => $student_id,
+        ]);
+        return ['result' => 'success'];
+    }
+
+    public function delete_student_from_class($class_id, $student_id)
+    {
+        StudentClass::where([
+            'class_id' => $class_id,
+            'user_id' => $student_id,
+        ])->delete();
+        return ['result' => 'success'];
+    }
 }
