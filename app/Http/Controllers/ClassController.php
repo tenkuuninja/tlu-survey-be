@@ -152,7 +152,7 @@ class ClassController extends Controller
         StudentClass::where([
             'class_id' => $class_id,
             'student_id' => $student_id,
-        ])->first()->delete();
+        ])->delete();
         return ['result' => 'success'];
     }
 }
