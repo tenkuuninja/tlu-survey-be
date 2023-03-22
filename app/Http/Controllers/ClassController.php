@@ -126,6 +126,10 @@ class ClassController extends Controller
      */
     public function destroy($id)
     {
+        $check = StudentClass::where('class_id', $id)->exists();
+        if ($check) {
+            return response(['errorMessage' => 'Lớp học này vẫn còn sinh viên học'], 409);
+        }
         Classs::destroy($id);
         return ['result' => 'success'];
     }
