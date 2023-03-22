@@ -77,6 +77,7 @@ class ClassController extends Controller
             'name' => $request->name,
             'subject_id' => $request->subject_id,
             'teacher_id' => $request->teacher_id,
+            'grade_level_id' => $request->grade_level_id,
             'status' => $request->status,
         ]);
         return ['result' => 'success'];
@@ -120,6 +121,7 @@ class ClassController extends Controller
         $item->name = $request->name;
         $item->subject_id = $request->subject_id;
         $item->teacher_id = $request->teacher_id;
+        $item->grade_level_id = $request->grade_level_id;
         $item->status = $request->status;
         $item->save();
         return ['result' => 'success'];
