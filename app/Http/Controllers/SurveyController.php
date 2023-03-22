@@ -150,6 +150,14 @@ class SurveyController extends Controller
         // var_dump($request);
         $body = $request->all();
 
+        $check = Answer::where('survey_id', $id)->exists();
+
+        if ($check) {
+            return response([
+                'errorMessage' => 'Biểu mẫu này không thể sửa do đã có người trả lời'
+            ], 409);
+        }
+
         try {
             DB::beginTransaction();
 
