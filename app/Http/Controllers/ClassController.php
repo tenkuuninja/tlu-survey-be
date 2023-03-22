@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Classs;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ClassController extends Controller
 {
@@ -16,6 +17,8 @@ class ClassController extends Controller
      */
     public function index(Request $request)
     {
+        $payload = JWTAuth::parseToken()->getPayload()->get('myCustomArray');
+
         $query = Classs::with('teacher.department')
             ->with('subject.department')
             ->with('grade_level');
@@ -28,6 +31,23 @@ class ClassController extends Controller
                 $subQuery->where('name', 'like', '%' . $search . '%')
                     ->orWhere('code', 'like', '%' . $search . '%');
             });
+        }
+        switch ($payload['role']) {
+            case 'teacher':
+                $query = $query->where('teacher_id', $payload['id']);
+                break;
+            case 'student':
+                $query = $query->whereIn(
+                    'id',
+                    StudentClass::where('student_id', $payload['id'])
+                        ->select('class_id')
+                        ->get()
+                );;
+                break;
+
+            default:
+                # code...
+                break;
         }
         $data = $query->get();
         return ['data' => $data];
