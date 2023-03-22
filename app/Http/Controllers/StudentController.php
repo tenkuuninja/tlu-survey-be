@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Classs;
+use App\Models\StudentClass;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 
@@ -16,6 +18,15 @@ class StudentController extends Controller
         $query = UserModel::with('department')->where('role', 'student');
         if (strlen($request->query('department', '')) > 0) {
             $query = $query->where('department_id', $request->query('department'));
+        }
+        if (strlen($request->query('class', '')) > 0) {
+            $query = $query
+                ->whereIn(
+                    'id',
+                    StudentClass::where('class_id', $request->query('class'))
+                        ->select('student_id')
+                        ->get()
+                );
         }
         if (strlen($request->query('search', '')) > 0) {
             $search = $request->query('search');
@@ -49,7 +60,7 @@ class StudentController extends Controller
         if (UserModel::where('username', $request->username)->exists()) {
             return response(['errorMessage' => 'Tên đăng nhập đã tồn tại'], 400);
         }
-        
+
         if (UserModel::where('citizen_id', $request->citizen_id)->exists()) {
             return response(['errorMessage' => 'Căn cước công dân đã tồn tại'], 400);
         }

@@ -16,10 +16,20 @@ class ClassController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Classs::with('teacher.department')->with('subject.department')
-            ->where('code', 'like', '%' . $request->query('search') . '%')
-            ->orWhere('name', 'like', '%' . $request->query('search') . '%')
-            ->get();
+        $query = Classs::with('teacher.department')
+            ->with('subject.department')
+            ->with('grade_level');
+        if (strlen($request->query('grade_level', '')) > 0) {
+            $query = $query->where('grade_level_id', $request->query('grade_level'));
+        }
+        if (strlen($request->query('search', '')) > 0) {
+            $search = $request->query('search');
+            $query = $query->where(function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('code', 'like', '%' . $search . '%');
+            });
+        }
+        $data = $query->get();
         return ['data' => $data];
     }
 
@@ -124,7 +134,7 @@ class ClassController extends Controller
 
     public function get_list_student($id,)
     {
-        $class = Classs::with('student_classes.student')->find($id);
+        $class = Classs::with('student_classes.student.department')->find($id);
 
         $students = [];
 

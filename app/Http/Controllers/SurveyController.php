@@ -96,7 +96,10 @@ class SurveyController extends Controller
      */
     public function show($id)
     {
-        $data = Survey::with('questions.options')->with('option')->where('id', $id)->get();
+        $data = Survey::with('questions.options')
+            ->with('option')
+            ->where('id', $id)
+            ->get();
         return ['data' => $data[0]];
     }
 

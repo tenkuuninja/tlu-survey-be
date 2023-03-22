@@ -51,17 +51,21 @@ class DatabaseSeeder extends Seeder
             ['code' => 'CNTT', 'name' => 'Công nghệ thông tin'],
             ['code' => 'KTPM', 'name' => 'Kỹ thuật phần mềm'],
             ['code' => 'HTTT', 'name' => 'Hệ thống thông tin'],
-            ['code' => 'ATTT', 'name' => 'An toàn thông tin'],
         ]);
 
         GradeLevel::factory()->createMany([
-            ['code' => 'K59', 'name' => 'K59', 'year' => 2017],
-            ['code' => 'K60', 'name' => 'K60', 'year' => 2018],
-            ['code' => 'K61', 'name' => 'K61', 'year' => 2019],
-            ['code' => 'K62', 'name' => 'K62', 'year' => 2020],
-            ['code' => 'K63', 'name' => 'K63', 'year' => 2021],
-            ['code' => 'K64', 'name' => 'K64', 'year' => 2022],
-            ['code' => 'K65', 'name' => 'K65', 'year' => 2025],
+            ['department_id' => 1, 'code' => 'K61CNTT', 'name' => 'K61CNTT', 'year' => 2017],
+            ['department_id' => 1, 'code' => 'K62CNTT', 'name' => 'K62CNTT', 'year' => 2018],
+            ['department_id' => 1, 'code' => 'K63CNTT', 'name' => 'K63CNTT', 'year' => 2019],
+            ['department_id' => 1, 'code' => 'K64CNTT', 'name' => 'K64CNTT', 'year' => 2019],
+            ['department_id' => 2, 'code' => 'K61KTPM', 'name' => 'K61KTPM', 'year' => 2017],
+            ['department_id' => 2, 'code' => 'K62KTPM', 'name' => 'K62KTPM', 'year' => 2018],
+            ['department_id' => 2, 'code' => 'K63KTPM', 'name' => 'K63KTPM', 'year' => 2019],
+            ['department_id' => 2, 'code' => 'K64KTPM', 'name' => 'K64KTPM', 'year' => 2019],
+            ['department_id' => 3, 'code' => 'K61HTTT', 'name' => 'K61HTTT', 'year' => 2017],
+            ['department_id' => 3, 'code' => 'K62HTTT', 'name' => 'K62HTTT', 'year' => 2018],
+            ['department_id' => 3, 'code' => 'K63HTTT', 'name' => 'K63HTTT', 'year' => 2019],
+            ['department_id' => 3, 'code' => 'K64HTTT', 'name' => 'K64HTTT', 'year' => 2019],
         ]);
 
         UserModel::factory()->createMany([
@@ -134,7 +138,7 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        
+
         Subject::factory()->createMany([
             [
                 'department_id' => 2,
@@ -165,7 +169,7 @@ class DatabaseSeeder extends Seeder
                 'description' => ''
             ],
         ]);
-        
+
         Classs::factory()->createMany([
             [
                 'subject_id' => 1,
