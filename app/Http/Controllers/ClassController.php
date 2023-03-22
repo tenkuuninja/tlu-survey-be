@@ -84,17 +84,17 @@ class ClassController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Classs $classs)
-    {
-        $data = UserModel::with('Classs')->with('StudentClass')
-            ->where([
-                ['role', 'student'],
-                ['users.id', 'student_classes.user_id'],
-                ['student_class.class_id', 'class.id']
-            ])
-            ->get();
-        return ['data' => $data];
-    }
+    // public function show(Classs $classs)
+    // {
+    //     $data = UserModel::with('Classs')->with('StudentClass')
+    //         ->where([
+    //             ['role', 'student'],
+    //             ['users.id', 'student_classes.user_id'],
+    //             ['student_class.class_id', 'class.id']
+    //         ])
+    //         ->get();
+    //     return ['data' => $data];
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -137,20 +137,20 @@ class ClassController extends Controller
     /**
      * Add more student to class
      */
-    public function add(Request $request)
-    {
-        StudentClass::create([
-            'user_id' => $request->user_id,
-            'class_id' => $request->class_id
-        ]);
-        return ['result' => 'success'];
-    }
+    // public function add(Request $request)
+    // {
+    //     StudentClass::create([
+    //         'user_id' => $request->user_id,
+    //         'class_id' => $request->class_id
+    //     ]);
+    //     return ['result' => 'success'];
+    // }
 
-    public function delete($id)
-    {
-        StudentClass::destroy($id);
-        return ['result' => 'success'];
-    }
+    // public function delete($id)
+    // {
+    //     StudentClass::destroy($id);
+    //     return ['result' => 'success'];
+    // }
 
     public function get_list_student($id,)
     {
