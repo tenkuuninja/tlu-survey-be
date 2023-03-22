@@ -23,6 +23,10 @@ class ClassController extends Controller
             ->with('subject.department')
             ->with('grade_level');
 
+        if (strlen($request->query('grade_level', '')) > 0) {
+            $query = $query->where('grade_level_id', $request->query('grade_level'));
+        }
+
         if (strlen($request->query('search', '')) > 0) {
             $search = $request->query('search');
             $query = $query->where(function ($subQuery) use ($search) {
