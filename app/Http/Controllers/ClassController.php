@@ -42,7 +42,7 @@ class ClassController extends Controller
                     StudentClass::where('student_id', $payload['id'])
                         ->select('class_id')
                         ->get()
-                );;
+                );
                 break;
 
             default:

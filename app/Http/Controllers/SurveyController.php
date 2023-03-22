@@ -17,6 +17,7 @@ use App\Models\UserSurvey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use User;
 
 class SurveyController extends Controller
@@ -26,11 +27,27 @@ class SurveyController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Survey::with('questions.options')
+        $payload = JWTAuth::parseToken()->getPayload()->get('myCustomArray');
+
+        $query = Survey::with('questions.options')
             ->with('option')
             ->with('user_surveys.user')
-            ->where('title', 'like', '%' . $request->query('search') . '%')
-            ->get();
+            ->where('title', 'like', '%' . $request->query('search') . '%');
+
+        if ($payload['role'] == 'student') {
+            $query = $query->where(function ($subQuery) use ($payload) {
+                $subQuery
+                    ->whereIn(
+                        'id',
+                        UserSurvey::where('user_id', $payload['id'])
+                            ->select('survey_id')
+                            ->get()
+                    )
+                    ->orWhereRelation('option', 'public', true);
+            });
+        }
+
+        $data = $query->get();
         return [
             'data' => $data
         ];
@@ -96,11 +113,20 @@ class SurveyController extends Controller
      */
     public function show($id)
     {
-        $data = Survey::with('questions.options')
+        $survey = Survey::with('questions.options')
             ->with('option')
             ->where('id', $id)
-            ->get();
-        return ['data' => $data[0]];
+            ->first();
+        if ($survey->option && !$survey->option->public) {
+            $payload = JWTAuth::parseToken()->getPayload()->get('myCustomArray');
+            $check = UserSurvey::where('user_id', $payload['id'])->where('survey_id', $id)->first();
+            if (!$check) {
+                return response([
+                    'errorMessage' => 'Tài khoản của bạn không đủ điều kiện để thực hiện khảo sát này'
+                ], 401);
+            }
+        }
+        return ['data' => $survey];
     }
 
     /**
@@ -119,54 +145,63 @@ class SurveyController extends Controller
         // var_dump($request);
         $body = $request->all();
 
-        $survey = Survey::find($id);
-        $survey->title = $body['title'];
-        $survey->note = '123';
-        $survey->status = 1;
-        $survey->save();
+        try {
+            DB::beginTransaction();
 
-        if (is_array($body['questions'])) {
-            $notDeleteQuestionIds = [];
-            foreach ($body['questions'] as $i => $q) {
-                $newQuestionId = null;
-                $newQuestionRecord = [
-                    'survey_id' => $survey->id,
-                    'type_id' => $q['type_id'],
-                    'title' => $q['title'],
-                    'required' => $q['required'],
-                    'question_no' => $i + 1,
-                ];
-                if (isset($q['id']) && is_numeric($q['id'])) {
-                    Question::where('id', $q['id'])->update($newQuestionRecord);
-                    $newQuestionId = $q['id'];
-                } else {
-                    $newQuestion = Question::create($newQuestionRecord);
-                    $newQuestionId = $newQuestion->id;
-                }
-                array_push($notDeleteQuestionIds, $newQuestionId);
-                if (is_array($q['options'])) {
-                    $notDeleteOptionIds = [];
-                    foreach ($q['options'] as $j => $option) {
-                        $newOptionRecord = [
-                            'question_id' => $newQuestionId,
-                            'title' => $option['title'],
-                            'option_no' => $j + 1,
-                        ];
-                        if (isset($option['id']) && is_numeric($option['id'])) {
-                            Option::where('id', $option['id'])->update($newOptionRecord);
-                            array_push($notDeleteOptionIds, $option['id']);
-                        } else {
-                            $newOption = Option::create($newOptionRecord);
-                            array_push($notDeleteOptionIds, $newOption->id);
-                        }
+            $survey = Survey::find($id);
+            $survey->title = $body['title'];
+            $survey->note = '123';
+            $survey->status = 1;
+            $survey->save();
+
+            if (is_array($body['questions'])) {
+                $notDeleteQuestionIds = [];
+                foreach ($body['questions'] as $i => $q) {
+                    $newQuestionId = null;
+                    $newQuestionRecord = [
+                        'survey_id' => $survey->id,
+                        'type_id' => $q['type_id'],
+                        'title' => $q['title'],
+                        'required' => $q['required'],
+                        'question_no' => $i + 1,
+                    ];
+                    if (isset($q['id']) && is_numeric($q['id'])) {
+                        Question::where('id', $q['id'])->update($newQuestionRecord);
+                        $newQuestionId = $q['id'];
+                    } else {
+                        $newQuestion = Question::create($newQuestionRecord);
+                        $newQuestionId = $newQuestion->id;
                     }
-                    Option::whereNotIn('id', $notDeleteOptionIds)->where('question_id', $newQuestionId)->delete();
+                    array_push($notDeleteQuestionIds, $newQuestionId);
+                    if (is_array($q['options'])) {
+                        $notDeleteOptionIds = [];
+                        foreach ($q['options'] as $j => $option) {
+                            $newOptionRecord = [
+                                'question_id' => $newQuestionId,
+                                'title' => $option['title'],
+                                'option_no' => $j + 1,
+                            ];
+                            if (isset($option['id']) && is_numeric($option['id'])) {
+                                Option::where('id', $option['id'])->update($newOptionRecord);
+                                array_push($notDeleteOptionIds, $option['id']);
+                            } else {
+                                $newOption = Option::create($newOptionRecord);
+                                array_push($notDeleteOptionIds, $newOption->id);
+                            }
+                        }
+                        Option::whereNotIn('id', $notDeleteOptionIds)->where('question_id', $newQuestionId)->delete();
+                    }
                 }
+                Question::whereNotIn('id', $notDeleteQuestionIds)->where('survey_id', $id)->delete();
             }
-            Question::whereNotIn('id', $notDeleteQuestionIds)->where('survey_id', $id)->delete();
-        }
 
-        return ['result' => 'success'];
+            DB::commit();
+
+            return ['result' => 'success'];
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+        }
     }
 
     /**
@@ -233,12 +268,7 @@ class SurveyController extends Controller
         if (count($class_ids) > 0) {
             $classes = Classs::whereIn('id', $class_ids)->get();
         }
-        $student_ids = [];
-        $user_surveys = UserSurvey::where('survey_id', $id)->select('user_id')->get();
-        foreach ($user_surveys as $user_survey) {
-            array_push($student_ids, $user_survey->user_id);
-        }
-        $students = UserModel::where('role', 'student')
+        $students = UserModel::with('department')->where('role', 'student')
             ->whereIn('id', UserSurvey::where('survey_id', $id)->select('user_id')->get())
             ->get();
 
@@ -264,6 +294,7 @@ class SurveyController extends Controller
                 'view_results' =>  $body['view_results'],
                 'public' => $body['public'],
             ]);
+            UserSurvey::where('survey_id', $survey_id)->delete();
             if (is_array($body['class_ids'])) {
                 foreach ($body['class_ids'] as $class_id) //tim list user id theo class_id
                 {
