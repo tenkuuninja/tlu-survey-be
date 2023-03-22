@@ -43,7 +43,7 @@ class SurveyController extends Controller
                             ->select('survey_id')
                             ->get()
                     )
-                    ->orWhereRelation('option', 'public', '!=', false);
+                    ->orWhereRelation('option', 'public', true);
             });
         }
 
@@ -78,6 +78,11 @@ class SurveyController extends Controller
                 'note' => '123',
                 'status' => 1,
             ]);
+
+            SurveyOption::create([
+                'survey_id' => $survey->id
+            ]);
+
             if (is_array($body['questions'])) {
                 foreach ($body['questions'] as $i => $q) {
                     $question = Question::create([
