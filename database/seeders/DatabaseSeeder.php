@@ -54,12 +54,12 @@ class DatabaseSeeder extends Seeder
         ]);
 
         GradeLevel::factory()->createMany([
-            ['code' => 'K59', 'name' => 'k59', 'year' => 2017],
-            ['code' => 'K60', 'name' => 'k60', 'year' => 2018],
-            ['code' => 'K61', 'name' => 'k61', 'year' => 2019],
-            ['code' => 'K62', 'name' => 'k62', 'year' => 2020],
-            ['code' => 'K63', 'name' => 'k63', 'year' => 2021],
-            ['code' => 'K64', 'name' => 'k64', 'year' => 2022],
+            ['code' => 'K59', 'name' => 'K59', 'year' => 2017],
+            ['code' => 'K60', 'name' => 'K60', 'year' => 2018],
+            ['code' => 'K61', 'name' => 'K61', 'year' => 2019],
+            ['code' => 'K62', 'name' => 'K62', 'year' => 2020],
+            ['code' => 'K63', 'name' => 'K63', 'year' => 2021],
+            ['code' => 'K64', 'name' => 'K64', 'year' => 2022],
         ]);
 
         UserModel::factory()->createMany([
