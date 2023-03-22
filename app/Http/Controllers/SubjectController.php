@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Subject;
 use App\Http\Controllers\Controller;
+use App\Models\Classs;
 use Illuminate\Http\Request;
 
 class SubjectController extends Controller
@@ -96,6 +97,10 @@ class SubjectController extends Controller
      */
     public function destroy($id)
     {
+        $check = Classs::where('subject_id', $id)->exists();
+        if ($check) {
+            return response(['errorMessage' => 'Môn học này đang có lớp học dạy'], 409);
+        }
         Subject::destroy($id);
         return ['result' => 'success'];
     }
