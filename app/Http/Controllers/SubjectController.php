@@ -13,10 +13,18 @@ class SubjectController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Subject::with('department')
-            ->where('code', 'like', '%' . $request->query('search') . '%')
-            ->orWhere('name', 'like', '%' . $request->query('search') . '%')
-            ->get();
+        $query  = Subject::with('department');
+        if (strlen($request->query('department', '')) > 0) {
+            $query = $query->where('department_id', $request->query('department'));
+        }
+        if (strlen($request->query('search', '')) > 0) {
+            $search = $request->query('search');
+            $query = $query->where(function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('code', 'like', '%' . $search . '%');
+            });
+        }
+        $data = $query->get();
         return ['data' => $data];
     }
 
