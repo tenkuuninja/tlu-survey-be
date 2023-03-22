@@ -43,7 +43,7 @@ class SurveyController extends Controller
                             ->select('survey_id')
                             ->get()
                     )
-                    ->orWhereRelation('option', 'public', true);
+                    ->orWhereRelation('option', 'public', '!=', false);
             });
         }
 
