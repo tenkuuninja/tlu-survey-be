@@ -13,8 +13,4 @@ class GradeLevel extends Model
     public $timestamps = false; 
     protected $guarded = [];
     
-    public function department(): BelongsTo
-    {
-        return $this->belongsTo(Department::class);
-    }
 }

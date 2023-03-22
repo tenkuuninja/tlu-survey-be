@@ -54,18 +54,12 @@ class DatabaseSeeder extends Seeder
         ]);
 
         GradeLevel::factory()->createMany([
-            ['department_id' => 1, 'code' => 'K61CNTT', 'name' => 'K61CNTT', 'year' => 2017],
-            ['department_id' => 1, 'code' => 'K62CNTT', 'name' => 'K62CNTT', 'year' => 2018],
-            ['department_id' => 1, 'code' => 'K63CNTT', 'name' => 'K63CNTT', 'year' => 2019],
-            ['department_id' => 1, 'code' => 'K64CNTT', 'name' => 'K64CNTT', 'year' => 2019],
-            ['department_id' => 2, 'code' => 'K61KTPM', 'name' => 'K61KTPM', 'year' => 2017],
-            ['department_id' => 2, 'code' => 'K62KTPM', 'name' => 'K62KTPM', 'year' => 2018],
-            ['department_id' => 2, 'code' => 'K63KTPM', 'name' => 'K63KTPM', 'year' => 2019],
-            ['department_id' => 2, 'code' => 'K64KTPM', 'name' => 'K64KTPM', 'year' => 2019],
-            ['department_id' => 3, 'code' => 'K61HTTT', 'name' => 'K61HTTT', 'year' => 2017],
-            ['department_id' => 3, 'code' => 'K62HTTT', 'name' => 'K62HTTT', 'year' => 2018],
-            ['department_id' => 3, 'code' => 'K63HTTT', 'name' => 'K63HTTT', 'year' => 2019],
-            ['department_id' => 3, 'code' => 'K64HTTT', 'name' => 'K64HTTT', 'year' => 2019],
+            ['code' => 'K59', 'name' => 'k59', 'year' => 2017],
+            ['code' => 'K60', 'name' => 'k60', 'year' => 2018],
+            ['code' => 'K61', 'name' => 'k61', 'year' => 2019],
+            ['code' => 'K62', 'name' => 'k62', 'year' => 2020],
+            ['code' => 'K63', 'name' => 'k63', 'year' => 2021],
+            ['code' => 'K64', 'name' => 'k64', 'year' => 2022],
         ]);
 
         UserModel::factory()->createMany([
@@ -110,6 +104,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'department_id' => 2,
+                'grade_level_id' => 4,
                 'code' => '2051060000',
                 'username' => 'sinhvien01',
                 'password' => password_hash('12345678', PASSWORD_BCRYPT),
@@ -124,6 +119,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'department_id' => 2,
+                'grade_level_id' => 4,
                 'code' => '2051060001',
                 'username' => 'sinhvien02',
                 'password' => password_hash('12345678', PASSWORD_BCRYPT),

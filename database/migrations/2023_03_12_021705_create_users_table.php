@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('department_id')->nullable();
             $table->foreign('department_id')->references('id')->on('departments')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('grade_level_id')->nullable();
+            $table->foreign('grade_level_id')->references('id')->on('grade_levels')->cascadeOnUpdate()->nullOnDelete();
             $table->string('code')->nullable();
             $table->string('username')->unique();
             $table->string('password');

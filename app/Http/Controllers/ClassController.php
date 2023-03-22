@@ -22,9 +22,7 @@ class ClassController extends Controller
         $query = Classs::with('teacher.department')
             ->with('subject.department')
             ->with('grade_level');
-        if (strlen($request->query('grade_level', '')) > 0) {
-            $query = $query->where('grade_level_id', $request->query('grade_level'));
-        }
+
         if (strlen($request->query('search', '')) > 0) {
             $search = $request->query('search');
             $query = $query->where(function ($subQuery) use ($search) {
@@ -73,7 +71,6 @@ class ClassController extends Controller
         Classs::create([
             'code' => $request->code,
             'name' => $request->name,
-            'grade_level_id' => $request->grade_level_id,
             'subject_id' => $request->subject_id,
             'teacher_id' => $request->teacher_id,
             'status' => $request->status,
@@ -117,7 +114,6 @@ class ClassController extends Controller
         $item = Classs::find($id);
         $item->code = $request->code;
         $item->name = $request->name;
-        $item->grade_level_id = $request->grade_level_id;
         $item->subject_id = $request->subject_id;
         $item->teacher_id = $request->teacher_id;
         $item->status = $request->status;

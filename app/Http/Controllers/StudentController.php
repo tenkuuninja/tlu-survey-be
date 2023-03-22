@@ -15,9 +15,15 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        $query = UserModel::with('department')->where('role', 'student');
+        $query = UserModel::with('department')
+            ->with('grade_level')
+            ->where('role', 'student');
+            
         if (strlen($request->query('department', '')) > 0) {
             $query = $query->where('department_id', $request->query('department'));
+        }
+        if (strlen($request->query('grade_level', '')) > 0) {
+            $query = $query->where('grade_level_id', $request->query('grade_level'));
         }
         if (strlen($request->query('class', '')) > 0) {
             $query = $query
@@ -61,6 +67,10 @@ class StudentController extends Controller
             return response(['errorMessage' => 'Tên đăng nhập đã tồn tại'], 400);
         }
 
+        if (UserModel::where('phone_number', $request->phone_number)->exists()) {
+            return response(['errorMessage' => 'Số điện thoại đã tồn tại'], 400);
+        }
+
         if (UserModel::where('citizen_id', $request->citizen_id)->exists()) {
             return response(['errorMessage' => 'Căn cước công dân đã tồn tại'], 400);
         }
@@ -69,6 +79,7 @@ class StudentController extends Controller
             'name' => $request->name,
             'code' => $request->code,
             'department_id' => $request->department_id,
+            'grade_level_id' => $request->grade_level_id,
             'username' => $request->username,
             'password' => password_hash($request->password, PASSWORD_BCRYPT),
             'email' => $request->code . '@e.tlu.edu.vn',
@@ -113,6 +124,10 @@ class StudentController extends Controller
             return response(['errorMessage' => 'Tên đăng nhập đã tồn tại'], 400);
         }
 
+        if ($user->phone_number != $request->phone_number && UserModel::where('phone_number', $request->phone_number)->exists()) {
+            return response(['errorMessage' => 'Số điện thoại đã tồn tại'], 400);
+        }
+
         if ($user->citizen_id != $request->citizen_id && UserModel::where('citizen_id', $request->citizen_id)->exists()) {
             return response(['errorMessage' => 'Căn cước công dân đã tồn tại'], 400);
         }
@@ -120,6 +135,7 @@ class StudentController extends Controller
         $item = UserModel::find($id);
         $item->name = $request->name;
         $item->department_id = $request->department_id;
+        $item->grade_level_id = $request->grade_level_id;
         $item->username = $request->username;
         if (isset($request->password) && strlen($request->password) > 0) {
             $item->password = password_hash($request->password, PASSWORD_BCRYPT);

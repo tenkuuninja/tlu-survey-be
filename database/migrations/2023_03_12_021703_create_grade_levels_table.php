@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('grade_levels', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('department_id')->nullable();
-            $table->foreign('department_id')->references('id')->on('departments')->cascadeOnUpdate()->nullOnDelete();
             $table->string('code');
             $table->string('name');
             $table->string('year');

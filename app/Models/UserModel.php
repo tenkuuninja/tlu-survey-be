@@ -20,4 +20,9 @@ class UserModel extends Model
     {
         return $this->belongsTo(Department::class);
     }
+    
+    public function grade_level(): BelongsTo
+    {
+        return $this->belongsTo(GradeLevel::class);
+    }
 }

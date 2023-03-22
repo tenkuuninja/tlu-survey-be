@@ -46,6 +46,10 @@ class TeacherController extends Controller
         if (UserModel::where('username', $request->username)->exists()) {
             return response(['errorMessage' => 'Tên đăng nhập đã tồn tại'], 400);
         }
+        
+        if (UserModel::where('phone_number', $request->phone_number)->exists()) {
+            return response(['errorMessage' => 'Số điện thoại đã tồn tại'], 400);
+        }
 
         if (UserModel::where('citizen_id', $request->citizen_id)->exists()) {
             return response(['errorMessage' => 'Căn cước công dân đã tồn tại'], 400);
@@ -97,6 +101,10 @@ class TeacherController extends Controller
 
         if ($user->username != $request->username && UserModel::where('username', $request->username)->exists()) {
             return response(['errorMessage' => 'Tên đăng nhập đã tồn tại'], 400);
+        }
+        
+        if ($user->phone_number != $request->phone_number && UserModel::where('phone_number', $request->phone_number)->exists()) {
+            return response(['errorMessage' => 'Số điện thoại đã tồn tại'], 400);
         }
 
         if ($user->citizen_id != $request->citizen_id && UserModel::where('citizen_id', $request->citizen_id)->exists()) {
