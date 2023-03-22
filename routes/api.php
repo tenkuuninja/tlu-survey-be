@@ -66,19 +66,22 @@ Route::post('/class', [ClassController::class, 'store']);
 Route::get('/class/{id}', [ClassController::class, 'show']);
 Route::put('/class/{id}', [ClassController::class, 'update']);
 Route::delete('/class/{id}', [ClassController::class, 'destroy']);
+
 //hien thi danh sach sinh vien trong lop hoc 
 Route::get('/class/{id}/student', [ClassController::class, 'get_list_student']);
 //them sinh vien trong lop hoctro
 Route::post('/class/{class_id}/student/{student_id}', [ClassController::class, 'add_student_to_class']);
 //xoa sinh vien khoi lop hoc 
 Route::delete('/class/{class_id}/student/{student_id}', [ClassController::class, 'delete_student_from_class']);
+/** 
+* //hien thi danh sach sinh vien trong lop hoc 
+* Route::get('/class/student', [ClassController::class, 'show']);
+* //them sinh vien trong lop hoctro
+* Route::post('/class/student', [ClassController::class, 'show', 'add']);
+* //xoa sinh vien khoi lop hoc 
+* Route::delete('/class/student', [ClassCtroller::class, 'show', 'delete']);
+*/ 
 
-// //hien thi danh sach sinh vien trong lop hoc 
-// Route::get('/class/student', [ClassController::class, 'show']);
-// //them sinh vien trong lop hoctro
-// Route::post('/class/student', [ClassController::class, 'show', 'add']);
-// //xoa sinh vien khoi lop hoc 
-// Route::delete('/class/student', [ClassCtroller::class, 'show', 'delete']);
 
 //xem ket qua dien bieu mau cua sinh vien/giang vien
 //thong ke khao sat
