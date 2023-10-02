@@ -59,6 +59,18 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => ['required'],
+            'code' => ['required'],
+            'department_id' => ['required'],
+            'grade_level_id' => ['required'],
+            'username' => ['required'],
+            'password' => ['required', 'min:8', 'max:20'],
+            'citizen_id' => ['required'],
+            'address' => ['required'],
+            'phone_number' => ['required', 'regex:/^(84|0[3|5|7|8|9])+([0-9]{8})$/g'],
+        ]);
+
         if (UserModel::where('code', $request->code)->exists()) {
             return response(['errorMessage' => 'Mã sinh viên đã tồn tại'], 400);
         }
@@ -115,6 +127,18 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validatedData = $request->validate([
+            'name' => ['required'],
+            'code' => ['required'],
+            'department_id' => ['required'],
+            'grade_level_id' => ['required'],
+            'username' => ['required'],
+            'password' => ['min:8', 'max:20'],
+            'citizen_id' => ['required'],
+            'address' => ['required'],
+            'phone_number' => ['required', 'regex:/^(84|0[3|5|7|8|9])+([0-9]{8})$/g'],
+        ]);
+
         $user = UserModel::find($id);
         if ($user->code != $request->code && UserModel::where('code', $request->code)->exists()) {
             return response(['errorMessage' => 'Mã sinh viên đã tồn tại'], 400);

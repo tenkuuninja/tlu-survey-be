@@ -39,6 +39,17 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => ['required'],
+            'code' => ['required'],
+            'department_id' => ['required'],
+            'username' => ['required'],
+            'password' => ['required', 'min:8', 'max:20'],
+            'citizen_id' => ['required'],
+            'address' => ['required'],
+            'phone_number' => ['required', 'regex:/^(84|0[3|5|7|8|9])+([0-9]{8})$/g'],
+        ]);
+
         if (UserModel::where('code', $request->code)->exists()) {
             return response(['errorMessage' => 'Mã giảng viên đã tồn tại'], 400);
         }
@@ -46,7 +57,7 @@ class TeacherController extends Controller
         if (UserModel::where('username', $request->username)->exists()) {
             return response(['errorMessage' => 'Tên đăng nhập đã tồn tại'], 400);
         }
-        
+
         if (UserModel::where('phone_number', $request->phone_number)->exists()) {
             return response(['errorMessage' => 'Số điện thoại đã tồn tại'], 400);
         }
@@ -94,6 +105,17 @@ class TeacherController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validatedData = $request->validate([
+            'name' => ['required'],
+            'code' => ['required'],
+            'department_id' => ['required'],
+            'username' => ['required'],
+            'password' => ['min:8', 'max:20'],
+            'citizen_id' => ['required'],
+            'address' => ['required'],
+            'phone_number' => ['required', 'regex:/^(84|0[3|5|7|8|9])+([0-9]{8})$/g'],
+        ]);
+
         $user = UserModel::find($id);
         if ($user->code != $request->code && UserModel::where('code', $request->code)->exists()) {
             return response(['errorMessage' => 'Mã giảng viên đã tồn tại'], 400);
@@ -102,7 +124,7 @@ class TeacherController extends Controller
         if ($user->username != $request->username && UserModel::where('username', $request->username)->exists()) {
             return response(['errorMessage' => 'Tên đăng nhập đã tồn tại'], 400);
         }
-        
+
         if ($user->phone_number != $request->phone_number && UserModel::where('phone_number', $request->phone_number)->exists()) {
             return response(['errorMessage' => 'Số điện thoại đã tồn tại'], 400);
         }

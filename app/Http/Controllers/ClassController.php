@@ -68,6 +68,14 @@ class ClassController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => ['required'],
+            'code' => ['required'],
+            'subject_id' => ['required'],
+            'teacher_id' => ['required'],
+            'grade_level_id' => ['required'],
+        ]);
+
         if (Classs::where('code', $request->code)->exists()) {
             return response(['errorMessage' => 'Mã lớp đã tồn tại'], 400);
         }
@@ -111,6 +119,14 @@ class ClassController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validatedData = $request->validate([
+            'name' => ['required'],
+            'code' => ['required'],
+            'subject_id' => ['required'],
+            'teacher_id' => ['required'],
+            'grade_level_id' => ['required'],
+        ]);
+
         $user = Classs::find($id);
         if ($user->code != $request->code && Classs::where('code', $request->code)->exists()) {
             return response(['errorMessage' => 'Mã lớp đã tồn tại'], 400);
